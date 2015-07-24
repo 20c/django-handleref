@@ -28,7 +28,7 @@ class SyncRefModel(models.Model):
     status = models.CharField(_('Status'), max_length=255, blank=True)
     created = CreationDateTimeField(_('Created'))
     updated = ModificationDateTimeField(_('Updated'))
-    version = models.IntegerField(default=1)
+    version = models.IntegerField(default=0)
 
     syncref = SyncRefManager()
     objects = models.Manager()
