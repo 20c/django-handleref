@@ -1,5 +1,4 @@
 from django.db import models
-from django_extensions.db.fields import ModificationDateTimeField, CreationDateTimeField
 from django.utils.translation import ugettext_lazy as _
 
 from django_handleref.manager import HandleRefManager
@@ -26,8 +25,8 @@ class HandleRefModel(models.Model):
 
     id = models.AutoField(primary_key=True)
     status = models.CharField(_('Status'), max_length=255, blank=True)
-    created = CreationDateTimeField(_('Created'))
-    updated = ModificationDateTimeField(_('Updated'))
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    updated = models.DateTimeField(_('Updated'), auto_now=True)
     version = models.IntegerField(default=0)
 
     handleref = HandleRefManager()
