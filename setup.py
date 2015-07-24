@@ -4,7 +4,7 @@ version = open('config/VERSION').read().strip()
 requirements = open('config/requirements.txt').read().split("\n")
 
 setup(
-    name='django-syncref',
+    name='django-handleref',
     version=version,
     author='Twentieth Century',
     author_email='code@20c.com',
@@ -16,11 +16,11 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=[
-      'django_syncref', 
-      'django_syncref.rest'
+      'django_handleref', 
+      'django_handleref.rest'
     ],
-    url = 'https://github.com/20c/django-syncref',
-    download_url = 'https://github.com/20c/django-syncref/%s'%version,
+    url = 'https://github.com/20c/django-handleref',
+    download_url = 'https://github.com/20c/django-handleref/%s'%version,
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False

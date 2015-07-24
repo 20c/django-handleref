@@ -2,21 +2,21 @@ from django.db import models
 from django_extensions.db.fields import ModificationDateTimeField, CreationDateTimeField
 from django.utils.translation import ugettext_lazy as _
 
-from django_syncref.manager import SyncRefManager
+from django_handleref.manager import HandleRefManager
 
 try:
     import reversion
 
-    def sync_version(**kwargs):
+    def handle_version(**kwargs):
         for instance in kwargs.get("instances"):
             instance.version = instance.version + 1
             instance.save()
 
-    reversion.post_revision_commit.connect(sync_version)
+    reversion.post_revision_commit.connect(handle_version)
 except ImportError:
     pass
 
-class SyncRefModel(models.Model):
+class HandleRefModel(models.Model):
     
     """
     Provides timestamps for creation and change times,
@@ -30,7 +30,7 @@ class SyncRefModel(models.Model):
     updated = ModificationDateTimeField(_('Updated'))
     version = models.IntegerField(default=0)
 
-    syncref = SyncRefManager()
+    handleref = HandleRefManager()
     objects = models.Manager()
 
     class Meta:

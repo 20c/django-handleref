@@ -1,12 +1,12 @@
-# django-syncref
+# django-handleref
 track when an object was created or changed and allow querying based on time and versioning (w/ django-reversion support)
 
-## SyncRefModel as a base for all your models
+## HandleRefModel as a base for all your models
     
     from django.db import models
-    from django_syncref.models import SyncRefModel
+    from django_handleref.models import HandleRefModel
     
-    class Test(SyncRefModel):
+    class Test(HandleRefModel):
         name = models.CharField(max_length=255)
 
 ## Querying for modification since
@@ -26,27 +26,27 @@ since a specific time or version
     test.name = "Changed my mind"
     test.save()
 
-    # now we can use the syncref manager to retrieve it
-    Test.syncref.since(timestamp=t).count() # 1
-    Test.syncref.since(timestamp=time.time().count() #0
+    # now we can use the handleref manager to retrieve it
+    Test.handleref.since(timestamp=t).count() # 1
+    Test.handleref.since(timestamp=time.time().count() #0
 
 
 ## Soft delete
 
-By default all models extending SyncRefModel will softdelete when their delete() method is called.
+By default all models extending HandleRefModel will softdelete when their delete() method is called.
 Note that this currently wont work for batch deletes - as this does not call the delete() method.
 
     test = Test.objects.get(id=1)
     test.delete()
 
-    # querying syncref undeleted will not contain the deleted object
-    Test.syncref.undeleted().filter(id=1).count() #0
+    # querying handleref undeleted will not contain the deleted object
+    Test.handleref.undeleted().filter(id=1).count() #0
 
-    # querying syncref since will not contain the deleted object
-    Test.syncref.since(timestamp=t).filter(id=1).count() #0
+    # querying handleref since will not contain the deleted object
+    Test.handleref.since(timestamp=t).filter(id=1).count() #0
 
-    # passing deleted=True to syncref since will contain the deleted object
-    Test.syncref.since(timestamp=t, deleted=True).filter(id=1).count() #1
+    # passing deleted=True to handleref since will contain the deleted object
+    Test.handleref.since(timestamp=t, deleted=True).filter(id=1).count() #1
 
     # querying using the standard objects manager will contain the deleted object
     Test.objects.filter(id=1).count() #1
@@ -57,7 +57,7 @@ Note that this currently wont work for batch deletes - as this does not call the
 
 ## Versioning (with django-reversion)
 
-When django-reversion is installed all your SyncRefModels will be valid for versioning.
+When django-reversion is installed all your HandleRefModels will be valid for versioning.
 
     import reversion
 
@@ -72,4 +72,4 @@ When django-reversion is installed all your SyncRefModels will be valid for vers
 
         obj.version #2
 
-    Test.syncref.since(version=1).count() #1
+    Test.handleref.since(version=1).count() #1

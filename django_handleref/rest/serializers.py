@@ -1,10 +1,10 @@
-from django_syncref.models import SyncRefModel
+from django_handleref.models import HandleRefModel
 from rest_framework import serializers
 
-class SyncRefSerializer(serializers.ModelSerializer):
+class HandleRefSerializer(serializers.ModelSerializer):
   version = serializers.ReadOnlyField()
   class Meta:
-    model = SyncRefModel,
+    model = HandleRefModel,
     fields = [
       'created',
       'updated',
