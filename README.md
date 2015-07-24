@@ -1,7 +1,7 @@
 # django-syncref
 track when an object was created or changed and allow querying based on time and versioning (w/ django-reversion support)
 
-# SyncRefModel as a base for all your models
+## SyncRefModel as a base for all your models
     
     from django.db import models
     from django_syncref.models import SyncRefModel
@@ -9,7 +9,7 @@ track when an object was created or changed and allow querying based on time and
     class Test(SyncRefModel):
         name = models.CharField(max_length=255)
 
-# Querying for modification since
+## Querying for modification since
 
 It is now possible for you to see which instances of a model have been created or modified
 since a specific time or version
@@ -31,7 +31,7 @@ since a specific time or version
     Test.syncref.since(timestamp=time.time().count() #0
 
 
-# Soft delete
+## Soft delete
 
 By default all models extending SyncRefModel will softdelete when their delete() method is called.
 Note that this currently wont work for batch deletes - as this does not call the delete() method.
@@ -55,7 +55,7 @@ Note that this currently wont work for batch deletes - as this does not call the
     test.delete(hard=True)
     Test.objects.filter(id=1).count() #0
 
-# Versioning (with django-reversion)
+## Versioning (with django-reversion)
 
 When django-reversion is installed all your SyncRefModels will be valid for versioning.
 
