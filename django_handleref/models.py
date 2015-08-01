@@ -70,6 +70,6 @@ class HandleRefModel(models.Model):
         if hasattr(self, "delete_cascade"):
             for key in self.delete_cascade:
                 for child in getattr(self, key).all():
-                    child.delete()
+                    child.delete(hard=hard)
 
 
