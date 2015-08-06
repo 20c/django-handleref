@@ -57,6 +57,10 @@ Note that this currently wont work for batch deletes - as this does not call the
 
 ## Versioning (with django-reversion)
 
+Requires 
+
+    django-reversion==1.8.7
+
 When django-reversion is installed all your HandleRefModels will be valid for versioning.
 
     import reversion
