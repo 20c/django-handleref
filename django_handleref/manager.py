@@ -69,3 +69,6 @@ class HandleRefManager(models.Manager):
 
     def since(self, **kwargs):
         return self.get_queryset().since(**kwargs)
+
+    def undeleted(self):
+        return self.get_queryset().undeleted()
