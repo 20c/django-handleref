@@ -27,7 +27,6 @@ class HandleRefQuerySet(models.QuerySet):
             return None
 
     def since(self, timestamp=None, version=None, deleted=False):
-
         """
         Queries the database for objects updated since timestamp or version
 
@@ -80,6 +79,10 @@ class HandleRefManager(models.Manager):
     """
     Custom manager to provide handleref querying
     """
+
+    @property
+    def tag(self):
+        return self.model._handleref.tag
 
     def get_queryset(self):
         return HandleRefQuerySet(self.model, using=self._db)

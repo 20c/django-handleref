@@ -15,8 +15,37 @@ try:
 except ImportError:
     pass
 
+class HandleRefOptions(object):
+    delete_cascade = []
+
+    def __init__(self, cls, opts):
+        if opts:
+            for key, value in opts.__dict__.iteritems():
+                setattr(self, key, value)
+
+        if not getattr(self, 'tag', None):
+            self.tag = cls.__name__.lower()
+
+
+class HandleRefMeta(models.base.ModelBase):
+    def __new__(cls, name, bases, attrs):
+        super_new = super(HandleRefMeta, cls).__new__
+
+        # only init subclass
+        parents = [b for b in bases if isinstance(b, HandleRefMeta)]
+        if not parents:
+            return super_new(cls, name, bases, attrs)
+
+        new = super_new(cls, name, bases, attrs)
+        opts = attrs.pop('HandleRef', None)
+        if not opts:
+            opts = getattr(new, 'HandleRef', None)
+
+        setattr(new, '_handleref', HandleRefOptions(new, opts))
+        return new
+
+
 class HandleRefModel(models.Model):
-    
     """
     Provides timestamps for creation and change times,
     versioning (using django-reversion) as well as
@@ -29,29 +58,30 @@ class HandleRefModel(models.Model):
     updated = models.DateTimeField(_('Updated'), auto_now=True)
     version = models.IntegerField(default=0)
 
+    __metaclass__ = HandleRefMeta
     handleref = HandleRefManager()
     objects = models.Manager()
 
     class Meta:
+        abstract = True
         get_latest_by = 'updated'
         ordering = ('-updated', '-created',)
-        abstract = True
 
     @property
     def handle(self):
-        if not self._ref_tag:
-            self._ref_tag = self.__class__.__name__.lower()
-        return self._ref_tag + str(self.id)
+        if not self.id:
+            raise ValueError("id not set")
+        return self.ref_tag + str(self.id)
 
     def __unicode__(self):
-        if not hasattr(self, "name"): 
+        if not hasattr(self, "name"):
           name = self.__class__.__name__
         else:
           name = self.name
         return name + '-' + self.handle
 
     def delete(self, hard=False):
-        
+
         """
         Override the vanilla delete functionality to soft-delete
         instead. Soft-delete is accomplished by setting the
@@ -67,9 +97,8 @@ class HandleRefModel(models.Model):
             return models.Model.delete(self)
         self.status = "deleted"
         self.save()
-        if hasattr(self, "delete_cascade"):
-            for key in self.delete_cascade:
-                for child in getattr(self, key).all():
-                    child.delete(hard=hard)
+        for key in self._handleref.delete_cascade:
+            for child in getattr(self, key).all():
+                child.delete(hard=hard)
 
 
