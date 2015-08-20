@@ -96,7 +96,7 @@ class HandleRefModel(models.Model):
     def handle(self):
         if not self.id:
             raise ValueError("id not set")
-        return self.ref_tag + str(self.id)
+        return self._handleref.tag + str(self.id)
 
     def __unicode__(self):
         if not hasattr(self, "name"):
