@@ -13,4 +13,10 @@ def test_model_init():
 
     widget = Widget()
 
+    # no tag specified on model, should default to lower-case
+    # class name
+    assert 'widget' == widget.ref_tag 
+    assert 'widget' == Widget.handleref.tag
 
+    assert widget._handleref.custom_option == "passthrough"
+    assert Widget.handleref.prop("custom_option") == "passthrough"
