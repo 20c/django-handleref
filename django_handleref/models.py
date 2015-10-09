@@ -15,6 +15,31 @@ try:
 except ImportError:
     pass
 
+
+class CreatedDateTimeField(models.DateTimeField):
+    """ DateTimeField that's set to now() on create """
+    def __init__(self, verbose_name=None, name=None, **kwargs):
+        if not verbose_name:
+            verbose_name = _('Created')
+
+        # force timestamp options
+        kwargs['auto_now'] = False
+        kwargs['auto_now_add'] = True
+        super(models.DateTimeField, self).__init__(verbose_name, name, **kwargs)
+
+
+class UpdatedDateTimeField(models.DateTimeField):
+    """ DateTimeField that's set to now() every update """
+    def __init__(self, verbose_name=None, name=None, **kwargs):
+        if not verbose_name:
+            verbose_name = _('Updated')
+
+        # force timestamp options
+        kwargs['auto_now'] = True
+        kwargs['auto_now_add'] = False
+        super(models.DateTimeField, self).__init__(verbose_name, name, **kwargs)
+
+
 class HandleRefOptions(object):
     delete_cascade = []
 
@@ -54,8 +79,8 @@ class HandleRefModel(models.Model):
 
     id = models.AutoField(primary_key=True)
     status = models.CharField(_('Status'), max_length=255, blank=True)
-    created = models.DateTimeField(_('Created'), auto_now_add=True)
-    updated = models.DateTimeField(_('Updated'), auto_now=True)
+    created = CreatedDateTimeField()
+    updated = UpdatedDateTimeField()
     version = models.IntegerField(default=0)
 
     __metaclass__ = HandleRefMeta

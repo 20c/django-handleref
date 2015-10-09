@@ -9,6 +9,7 @@ def pytest_configure():
             'django.contrib.admin',
             'django.contrib.sessions',
             'django_handleref',
+            'tests',
         ],
         DATABASE_ENGINE='django.db.backends.sqlite3',
         DATABASES={

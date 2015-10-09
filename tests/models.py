@@ -8,14 +8,8 @@ class Org(HandleRefModel):
     website = models.URLField(blank=True)
     notes = models.TextField(blank=True)
 
-    class Meta:
-        db_table = u'peeringdb_organization'
-        verbose_name_plural = "Organizations"
-
     class HandleRef:
-        delete_cascade = ["widget_set",]
         tag = 'org'
-        pass
 
     def __unicode__(self):
         return self.name
