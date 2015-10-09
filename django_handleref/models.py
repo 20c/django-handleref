@@ -68,6 +68,10 @@ class HandleRefModel(models.Model):
         ordering = ('-updated', '-created',)
 
     @property
+    def ref_tag(self):
+        return self._handleref.tag
+
+    @property
     def handle(self):
         if not self.id:
             raise ValueError("id not set")
