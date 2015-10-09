@@ -69,6 +69,8 @@ class HandleRefModel(models.Model):
 
     @property
     def ref_tag(self):
+        if not self._handleref.tag:
+            raise ValueError("tag not set")
         return self._handleref.tag
 
     @property
