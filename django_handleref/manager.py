@@ -79,10 +79,18 @@ class HandleRefManager(models.Manager):
     """
     Custom manager to provide handleref querying
     """
-
+    
     @property
     def tag(self):
-        return self.model._handleref.tag
+        return self.prop("tag")
+
+    def prop(self, key):
+        """
+        Convenience function for retrieving properties off the
+        HandleRef class instance on the model
+        """
+
+        return getattr(self.model._handleref, key)
 
     def get_queryset(self):
         return HandleRefQuerySet(self.model, using=self._db)
