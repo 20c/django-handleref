@@ -8,5 +8,6 @@ class HandleRefSerializer(serializers.ModelSerializer):
     model = HandleRefModel,
     fields = [
       'created',
-      'updated'
+      'updated',
+      'status'
     ]
