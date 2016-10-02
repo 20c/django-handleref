@@ -1,4 +1,4 @@
-
+import time
 import pytest
 
 from django.test import TestCase
@@ -29,10 +29,23 @@ class ModelTests(TestCase):
 
     def test_soft_delete(self):
         org = Org.objects.create(name="TEST SOFT DELETE", status="ok")
+        
+        sub1 = Sub.objects.create(name="TEST SUB 1", status="ok", org=org)
+        sub2 = Sub.objects.create(name="TEST SUB 2", status="deleted", org=org)
+
+        time.sleep(1)
+        u = sub2.updated
+
         self.assertEqual(org.status, "ok")
         org.delete()
         org.refresh_from_db()
         self.assertEqual(org.status, "deleted")
+
+        sub1.refresh_from_db()
+        sub2.refresh_from_db()
+
+        self.assertEqual(sub1.status, "deleted")
+        self.assertEqual(sub2.updated, u)
 
 
     def test_hard_delete(self):

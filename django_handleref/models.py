@@ -129,7 +129,15 @@ class HandleRefModel(models.Model):
         self.status = "deleted"
         self.save()
         for key in self._handleref.delete_cascade:
-            for child in getattr(self, key).all():
+            q = getattr(self, key).all()
+
+            if not hard:
+                # if we are soft deleting only trigger delete on
+                # objects that are not already deleted, as to avoid
+                # unnecessary re-saves and overriding of updated dates
+                q = q.exclude(status="deleted")
+
+            for child in q:
                 child.delete(hard=hard)
 
 
