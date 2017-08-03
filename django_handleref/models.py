@@ -4,14 +4,16 @@ from django.utils.translation import ugettext_lazy as _
 from django_handleref.manager import HandleRefManager
 
 try:
-    import reversion
+    import reversion.signals
 
     def handle_version(**kwargs):
-        for instance in kwargs.get("instances"):
+        print(kwargs)
+        for vs in kwargs.get("versions"):
+            instance = vs.object
             instance.version = instance.version + 1
             instance.save()
 
-    reversion.post_revision_commit.connect(handle_version)
+    reversion.signals.post_revision_commit.connect(handle_version)
 except ImportError:
     pass
 
