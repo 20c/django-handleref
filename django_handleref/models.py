@@ -7,7 +7,6 @@ try:
     import reversion.signals
 
     def handle_version(**kwargs):
-        print(kwargs)
         for vs in kwargs.get("versions"):
             instance = vs.object
             instance.version = instance.version + 1
