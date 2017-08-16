@@ -1,5 +1,7 @@
-*.pyc
-*.swp
-*.swo
+*.py[cod]
+*.egg
 *.egg-info
 .cache/
+.coverage
+coverage.xml
+dist/
