@@ -88,7 +88,7 @@ class HandleRefModel(models.Model):
     handleref = HandleRefManager()
     objects = models.Manager()
 
-    class Meta:
+    class Meta(object):
         abstract = True
         get_latest_by = 'updated'
         ordering = ('-updated', '-created',)
@@ -107,9 +107,9 @@ class HandleRefModel(models.Model):
 
     def __unicode__(self):
         if not hasattr(self, "name"):
-          name = self.__class__.__name__
+            name = self.__class__.__name__
         else:
-          name = self.name
+            name = self.name
         return name + '-' + self.handle
 
     def delete(self, hard=False):
