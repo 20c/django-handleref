@@ -4,7 +4,11 @@ branches:
   except:
     - gh-pages
 env:
-  - TOX_ENV=py27
+  - TOX_ENV=py27-dj18
+  - TOX_ENV=py27-dj19
+  - TOX_ENV=py27-dj110
+  - TOX_ENV=py27-dj111
+
 before_install:
   - sudo apt-get -qq update
 install:
