@@ -48,7 +48,9 @@ class HandleRefOptions(object):
 
     def __init__(self, cls, opts):
         if opts:
-            for key, value in opts.__dict__.iteritems():
+            for key, value in opts.__dict__.items():
+                if key.startswith("__"):
+                    continue
                 setattr(self, key, value)
 
         if not getattr(self, 'tag', None):
