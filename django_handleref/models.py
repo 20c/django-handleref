@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_handleref.manager import HandleRefManager
 
+from six import with_metaclass
+
 try:
     import reversion.signals
 
@@ -71,7 +73,7 @@ class HandleRefMeta(models.base.ModelBase):
         return new
 
 
-class HandleRefModel(models.Model):
+class HandleRefModel(with_metaclass(HandleRefMeta, models.Model)):
     """
     Provides timestamps for creation and change times,
     versioning (using django-reversion) as well as
@@ -84,7 +86,6 @@ class HandleRefModel(models.Model):
     updated = UpdatedDateTimeField()
     version = models.IntegerField(default=0)
 
-    __metaclass__ = HandleRefMeta
     handleref = HandleRefManager()
     objects = models.Manager()
 
@@ -140,5 +141,3 @@ class HandleRefModel(models.Model):
 
             for child in q:
                 child.delete(hard=hard)
-
-
