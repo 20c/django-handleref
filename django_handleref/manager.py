@@ -49,7 +49,6 @@ class HandleRefQuerySet(models.QuerySet):
 
         if timestamp is not None:
 
-            # if type(timestamp) in [int, long, float]:
             if isinstance(timestamp, numbers.Real):
                 timestamp = datetime.datetime.fromtimestamp(timestamp)
 
