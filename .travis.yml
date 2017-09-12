@@ -3,19 +3,6 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
-env:
-  - TOX_ENV=py27-dj18
-  - TOX_ENV=py27-dj19
-  - TOX_ENV=py27-dj110
-  - TOX_ENV=py27-dj111
-  - TOX_ENV=py34-dj18
-  - TOX_ENV=py34-dj19
-  - TOX_ENV=py34-dj110
-  - TOX_ENV=py34-dj111
-  - TOX_ENV=py35-dj18
-  - TOX_ENV=py35-dj19
-  - TOX_ENV=py35-dj110
-  - TOX_ENV=py35-dj111
 branches:
   except:
     - gh-pages
@@ -28,6 +15,6 @@ install:
   - pip install tox-travis
   - pip install codecov
 script:
-  - tox -e $TOX_ENV
+  - tox
 after_success:
   - codecov
