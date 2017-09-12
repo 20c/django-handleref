@@ -1,5 +1,7 @@
 import datetime
 
+import numbers
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
@@ -47,7 +49,7 @@ class HandleRefQuerySet(models.QuerySet):
 
         if timestamp is not None:
 
-            if type(timestamp) in [int, long, float]:
+            if isinstance(timestamp, numbers.Real):
                 timestamp = datetime.datetime.fromtimestamp(timestamp)
 
             qset = qset.filter(
@@ -79,7 +81,7 @@ class HandleRefManager(models.Manager):
     """
     Custom manager to provide handleref querying
     """
-    
+
     @property
     def tag(self):
         return self.prop("tag")
