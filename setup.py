@@ -20,7 +20,7 @@ setup(
       'django_handleref.rest'
     ],
     url = 'https://github.com/20c/django-handleref',
-    download_url = 'https://github.com/20c/django-handleref/%s'%version,
+    download_url = 'https://github.com/20c/django-handleref/archive/%s.zip' % version,
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False
