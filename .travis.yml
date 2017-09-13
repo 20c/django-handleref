@@ -3,18 +3,38 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
+  - "3.6"
+sudo: false
 branches:
   except:
     - gh-pages
+env:
+  - DJANGO=1.8
+  - DJANGO=1.9
+  - DJANGO=1.10
+  - DJANGO=1.11
+matrix:
+  fast_finish: true
+  exclude:
+    - python: "3.4"
+      env: DJANGO=1.8
+    - python: "3.4"
+      env: DJANGO=1.9
+    - python: "3.5"
+      env: DJANGO=1.8
+    - python: "3.5"
+      env: DJANGO=1.9
+    - python: "3.6"
+      env: DJANGO=1.8
+    - python: "3.6"
+      env: DJANGO=1.9
 before_install:
   - sudo apt-get -qq update
 install:
-  - python -m pip install -U pip
+  - pip install -U pip
   - pip install -U setuptools
-  - pip install tox
-  - pip install tox-travis
-  - pip install codecov
+  - pip install tox-travis codecov
 script:
   - tox
 after_success:
-  - codecov
+  - codecov -e DJANGO
