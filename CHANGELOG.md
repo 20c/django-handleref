@@ -10,6 +10,11 @@
 ### Security
 
 
+## [0.3.0]
+### Added
+- py3 compatibility
+
+
 ## [0.2.0]
 ### Added
 - tox test django 1.8, 1.9, 1.10 and 1.11
