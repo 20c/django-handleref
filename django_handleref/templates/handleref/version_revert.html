@@ -1,0 +1,126 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans "Home" %}</a> &rsaquo;
+        <a href="{% url 'admin:app_list' opts.app_label %}">{{opts.app_config.verbose_name}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'changelist' %}">{{opts.verbose_name_plural|capfirst}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'change' object_id %}">{{ object_id }}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'history' object_id %}">{% trans "History" %}</a> &rsaquo;
+        {% blocktrans with opts.verbose_name as verbose_name %}Revert Changes{% endblocktrans %}
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{% trans "Revert Changes" %}</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Object" %}</th>
+      <th scope="col">{% trans "Version" %}</th>
+      <th scope="col">{% trans "Version ID" %}</th>
+      <th scope="col">{% trans "User" %}</th>
+      <th scope="col">{% trans "Date" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for version in versions %}
+    <tr>
+      <td>{{ opts.verbose_name }}: {{ instance }}</td>
+      <td>{{ version.data.version }}</td>
+      <td>{{ version.id }}</td>
+      <td>{{ version.user }}</td>
+      <td>{{ version.date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<h1>{% trans "Preview Reversion" %}</h1>
+
+<p>{% blocktrans %}
+You are about to revert the changes made to the object accross <strong>{{ count }}</strong> versions. Please carefully review the proposed changes below and then click the `Revert` button to proceed with the reversion.
+{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Please note that performing undeletions for soft-deleted objects will NOT do cascading undeletes to children of that object.
+{% endblocktrans %}</p>
+
+{% if errors %}
+    <p class="errornote">
+    {% blocktrans %}Reversion was aborted because of these errors{% endblocktrans %}
+    </p>
+    <ul>
+    {% for field, messages in errors.items %}
+    {% for message in messages %}
+    {% if field == "non_field_errors" %}
+      <li>{{ message }}</li>
+    {% else %}
+      <li><strong>{{ field }}</strong>: {{ message }}</li>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if changes %}
+
+<form method="post" action="{% url opts|admin_urlname:'version_revert_process' object_id %}">
+{% csrf_token %}
+<input type="hidden" name="process" value="yes">
+{% for version in versions %}
+<input type="hidden" name="version_id" value="{{ version.id }}">
+{% endfor %}
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col" style="width:20%">{% trans "Field" %}</th>
+      <th scope="col" style="width:40%">{% trans "Revert to" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field, diffs in changes %}
+      <tr>
+        <td>{{ field }}</td>
+        <td>
+          <table style="border:none; width:100%;">
+            <tbody>
+            {% for version_id, diff in diffs.items %}
+              <tr style="background-color: {% cycle '#fff' '#f1f1f1' %}">
+                <td style="border:none; width: 20%;">
+                  <input type="radio" name="field_{{ field }}" {% if forloop.first %}checked{% endif %} value="{{ diff.version.previous.id }}">
+                  <strong>Version {{ diff.version.previous.data.version }}</strong>
+                </td>
+                <td style="border:none">
+                  {% if diff.old == "" %}-{% else %}{{ diff.old }}{% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+              <tr>
+                <td colspan="2">
+                  <input type="radio" name="field_{{ field }}" value="0">
+                  <strong>{% trans "Do not revert" %}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+  <button type="submit" class="button" title="{% trans "Revert changes" %}" name="index" value="0">{% trans "Revert changes" %}</button>
+</form>
+
+
+
+{% endif %}
+
+
+{% endblock %}

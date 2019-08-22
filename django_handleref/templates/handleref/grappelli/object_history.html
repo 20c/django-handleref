@@ -1,0 +1,95 @@
+{% extends "admin/object_history.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="grp-content-container">
+  <div class="grp-module" id="changelist">
+
+    <form id="grp-changelist-form"  method="post" novalidate>
+    {% csrf_token %}
+
+      <section id="grp-changelist">
+        <div class="grp-module grp-changelist-results">
+
+<table id="change-history" class="grp-sortable">
+
+  <thead>
+    <tr>
+      <th scope="col">&nbsp;</th>
+      {% for field, label in version_list_fields %}
+      <th scope="col" class="sortable"><div class="grp-text"><a>{{ label }}</a></div></th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for version in history %}
+    <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
+      <td><input type="checkbox" name="version_id" class="action-select" value="{{ version.id }}" /></td>
+      {% for field, value in version.fields %}
+        {% if field == "version_changes" %}
+          <td>
+          {% for changed_field, diff in value.items %}
+          <div><strong>{{ changed_field }}:</strong> <span class="diff-old">{{ diff.old|truncatechars:50 }}</span> &#8594; <span class="diff-new">{{ diff.changed|truncatechars:50 }}</span></div>
+          {% endfor %}
+          </td>
+        {% elif field == "version_id" %}
+          <td><a href="{{value}}/">{{ value }}</a></td>
+        {% else %}
+        <td>{{ value }}</td>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% if version.comment %}
+    <tr>
+      <td colspan="{{ field_count }}"><i>{{ version.comment }}</i></td>
+    </tr>
+    {% endif %}
+
+    {% endfor %}
+  </tbody>
+</table>
+
+        </div>
+      </section>
+
+        <!-- PAGINATION BOTTOM -->
+        {% if not listing.result_count  == 0 %}
+            {% block pagination_bottom %}
+                <div class="grp-module">
+                    <div class="grp-row">{% pagination listing %}</div>
+                </div>
+            {% endblock %}
+        {% endif %}
+
+        <!-- SUBMIT ROW -->
+        {% if action_form %}
+            <footer id="submit" class="grp-module grp-submit-row grp-fixed-footer">
+                <header style="display:none"><h1>Submit Options</h1></header>
+                <ul>
+                    {% if action_form %}<li class="grp-float-left grp-changelist-actions">{% admin_actions %}</li>{% endif %}
+                </ul>
+            </footer>
+        {% endif %}
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

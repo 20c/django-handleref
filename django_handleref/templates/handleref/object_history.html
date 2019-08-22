@@ -1,0 +1,75 @@
+{% extends "admin/object_history.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="module" id="changelist">
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="actions">
+  {{ action_form }}
+  <button type="submit" class="button" title="Run the selected action" name="index" value="0">Go</button>
+  </div>
+
+<table id="change-history">
+
+  <thead>
+    <tr>
+      <th scope="col">&nbsp;</th>
+      {% for field, label in version_list_fields %}
+      <th scope="col"><div class="text"><a>{{ label }}</a></div></th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for version in history %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+      <td><input type="checkbox" name="version_id" class="action-select" value="{{ version.id }}" /></td>
+      {% for field, value in version.fields %}
+        {% if field == "version_changes" %}
+          <td>
+          {% for changed_field, diff in value.items %}
+          <div style="margin-bottom: 10px;"><strong>{{ changed_field }}:</strong> <span style="background-color: #f3dede; padding: 3px;">{{ diff.old|truncatechars:50 }}</span> &#8594; <span style="background-color: #cdf5cd; padding: 3px;">{{ diff.changed|truncatechars:50 }}</span></div>
+          {% endfor %}
+          </td>
+        {% elif field == "version_id" %}
+          <td><a href="{{value}}/">{{ value }}</a></td>
+        {% else %}
+          <td>{{ value }}</td>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% if version.comment %}
+    <tr>
+      <td colspan="{{ field_count }}"><i>{{ version.comment }}</i></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+{% block pagination %}{% pagination listing %}{% endblock %}
+
+</form>
+
+</div>
+</div>
+{% endblock %}
