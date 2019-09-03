@@ -1,0 +1,113 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans "Home" %}</a> &rsaquo;
+        <a href="{% url 'admin:app_list' opts.app_label %}">{{opts.app_config.verbose_name}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'changelist' %}">{{opts.verbose_name_plural|capfirst}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'change' object_id %}">{{ object_id }}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'history' object_id %}">{% trans "History" %}</a> &rsaquo;
+        {% blocktrans with opts.verbose_name as verbose_name %}Version Details{% endblocktrans %} ({{ version.data.version }})
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{% trans "Version Details" %}</h1>
+
+{% block object-tools %}
+  <ul class="object-tools">
+    {% block object-tools-items %}
+    <li>
+        {% if previous.version %}
+        {% url opts|admin_urlname:'version_revert' instance.pk|admin_urlquote as revert_url %}
+        <a href="{{ revert_url }}?version_id={{ version_id }}">{% trans "Revert changes made in this Version" %}</a>
+        {% endif %}
+
+        {% if version.next.version %}
+        {% url opts|admin_urlname:'version_rollback' object_id version.id|admin_urlquote as rollback_url %}
+        <a href="{{ rollback_url }}">{% trans "Rollback to this Version" %}</a>
+        {% endif %}
+    </li>
+    {% endblock %}
+  </ul>
+{% endblock %}
+
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Object" %}</th>
+      <th scope="col">{% trans "Version" %}</th>
+      <th scope="col">{% trans "Version ID" %}</th>
+      <th scope="col">{% trans "User" %}</th>
+      <th scope="col">{% trans "Date" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ opts.verbose_name }}: {{ instance }}</td>
+      <td>{{ version.data.version }}</td>
+      <td>{{ version.id }}</td>
+      <td>{{ version.user }}</td>
+      <td>{{ version.date }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h1>{% trans "Changes" %}</h1>
+
+{% if previous.version %}
+
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col" style="width:20%">{% trans "Field" %}</th>
+      <th scope="col" style="width:40%">{% trans "Version" %} {{ previous.data.version }}</th>
+      <th scope="col" style="width:40%">{% trans "Version" %} {{ version.data.version }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field, diff in changes.items %}
+      <tr>
+        <td>{{ field }}</td>
+        <td style="background-color:#f3dede;">{{ diff.old }}</td>
+        <td style="background-color:#cdf5cd;">{{ diff.changed }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+
+<p>{% blocktrans %}You are looking at the initial version of the object, thus a list of changes cannot be provided{% endblocktrans %}</p>
+
+{% endif %}
+
+<h1>{% trans "Snapshot" %}</h1>
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col" style="width:20%">{% trans "Field" %}</th>
+      <th scope="col" style="width:80%">{% trans "Value" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field, value in version.data_sorted %}
+      {% if field != "created" and field != "updated" %}
+      <tr>
+        <td>{{ field }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}

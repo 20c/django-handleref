@@ -1,0 +1,97 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans "Home" %}</a> &rsaquo;
+        <a href="{% url 'admin:app_list' opts.app_label %}">{{opts.app_config.verbose_name}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'changelist' %}">{{opts.verbose_name_plural|capfirst}}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'change' object_id %}">{{ object_id }}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'history' object_id %}">{% trans "History" %}</a> &rsaquo;
+        <a href="{% url opts|admin_urlname:'version' object_id version.id %}">{{ version.data.version }}</a> &rsaquo;
+        {% blocktrans with opts.verbose_name as verbose_name %}Rollback{% endblocktrans %}
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{% trans "Rollback to version" %} {{ version.data.version }}</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Object" %}</th>
+      <th scope="col">{% trans "Version" %}</th>
+      <th scope="col">{% trans "Version ID" %}</th>
+      <th scope="col">{% trans "User" %}</th>
+      <th scope="col">{% trans "Date" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ opts.verbose_name }}: {{ instance }}</td>
+      <td>{{ version.data.version }}</td>
+      <td>{{ version.id }}</td>
+      <td>{{ version.user }}</td>
+      <td>{{ version.date }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+  <div style="margin-top:15px"></div>
+<h1>{% trans "Confirm Rollback" %}</h1>
+
+<p>{% blocktrans %}
+You are about to rollback this object to the version snapshot below. Please carefully review the proposed values and click the `Rollback` button to proceed with the rollback.{% endblocktrans %}</p>
+<p>{% blocktrans %}Please note that performing undeletions for soft-deleted objects by restoring the `status` field of the object will NOT perform cascading undeletes to children of that object.
+{% endblocktrans %}</p>
+
+{% if errors %}
+    <p class="errornote">
+    {% blocktrans %}Rollback was aborted because of these errors{% endblocktrans %}
+    </p>
+    <ul>
+    {% for field, messages in errors.items %}
+    {% for message in messages %}
+    {% if field == "non_field_errors" %}
+      <li>{{ message }}</li>
+    {% else %}
+      <li><strong>{{ field }}</strong>: {{ message }}</li>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post" action="{% url opts|admin_urlname:'version_rollback_process' object_id version.id %}">
+{% csrf_token %}
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col" style="width:20%">{% trans "Field" %}</th>
+      <th scope="col" style="width:80%">{% trans "Value" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field, value in version.data_sorted %}
+      {% if field != "created" and field != "updated" %}
+      <tr>
+        <td>{{ field }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+  <div style="margin-top:15px"></div>
+
+  <button type="submit" class="button" title="{% trans "Rollback" %}" name="index" value="0">{% trans "Rollback" %}</button>
+</form>
+
+
+
+{% endblock %}
