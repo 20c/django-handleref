@@ -9,6 +9,11 @@
 ### Removed
 ### Security
 
+## [0.4.1]
+### Fixed
+- add grappelli templates to MANIFEST.in
+
+
 ## [0.4.0]
 ### Added
 - version admin tools: history, revert and rollback
