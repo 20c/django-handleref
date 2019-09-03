@@ -9,6 +9,10 @@
 ### Removed
 ### Security
 
+## [0.4.0]
+### Added
+- version admin tools: history, revert and rollback
+
 
 ## [0.3.0]
 ### Added
