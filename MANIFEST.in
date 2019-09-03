@@ -1,3 +1,4 @@
 include config/requirements.txt
 include config/VERSION
 include django_handleref/templates/handleref/*.html 
+include django_handleref/templates/handleref/grappelli/*.html 
