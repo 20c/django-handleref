@@ -17,7 +17,7 @@ class Org(HandleRefModel):
 
 class Sub(HandleRefModel):
     name = models.CharField(max_length=255, unique=True)
-    org = models.ForeignKey(Org, related_name="sub_entities")
+    org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="sub_entities")
 
     class HandleRef:
         tag = 'sub'
