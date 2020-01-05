@@ -19,7 +19,7 @@
 
 <h1>{% trans "Rollback to version" %} {{ version.data.version }}</h1>
 
-<table>
+<table class="grp-table">
   <thead>
     <tr>
       <th scope="col">{% trans "Object" %}</th>
@@ -66,7 +66,7 @@ You are about to rollback this object to the version snapshot below. Please care
 
 <form method="post" style="margin-top:15px;" action="{% url opts|admin_urlname:'version_rollback_process' object_id version.id %}">
 {% csrf_token %}
-<table style="width:100%">
+<table class="grp-table" style="width:100%">
   <thead>
     <tr>
       <th scope="col" style="width:20%">{% trans "Field" %}</th>

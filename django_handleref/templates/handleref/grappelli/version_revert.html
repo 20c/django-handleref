@@ -18,7 +18,7 @@
 
 <h1>{% trans "Revert Changes" %}</h1>
 
-<table>
+<table class="grp-table">
   <thead>
     <tr>
       <th scope="col">{% trans "Object" %}</th>
@@ -74,7 +74,7 @@ You are about to revert the changes made to the object accross <strong>{{ count 
 {% for version in versions %}
 <input type="hidden" name="version_id" value="{{ version.id }}">
 {% endfor %}
-<table style="width:100%">
+<table style="width:100%" class="grp-table">
   <thead>
     <tr>
       <th scope="col" style="width:20%">{% trans "Field" %}</th>
