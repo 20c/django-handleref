@@ -1,0 +1,22 @@
+0.2.0:
+  added:
+  - tox test django 1.8, 1.9, 1.10 and 1.11
+  - support handle_version in later versions of reversion
+  changed:
+  - when soft-deleting dont re-save already deleted children
+0.3.0:
+  added:
+  - py3 compatibility
+0.4.0:
+  added:
+  - 'version admin tools: history, revert and rollback'
+0.4.1:
+  fixed:
+  - add grappelli templates to MANIFEST.in
+Unreleased:
+  added: []
+  changed: []
+  deprecated: []
+  fixed: []
+  removed: []
+  security: []

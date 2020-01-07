@@ -1,0 +1,10 @@
+
+ctl:
+
+  plugins:
+    - type: changelog
+      name: changelog
+
+  permissions:
+    - namespace: "ctl"
+      permission: "crud"
