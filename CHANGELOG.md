@@ -4,6 +4,11 @@
 ## Unreleased
 
 
+## 0.5.0
+### Added
+- django2.2 support
+
+
 ## 0.4.1
 ### Fixed
 - add grappelli templates to MANIFEST.in
