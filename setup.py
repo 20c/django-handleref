@@ -1,7 +1,7 @@
 from setuptools import setup
 
-version = open('config/VERSION').read().strip()
-requirements = open('config/requirements.txt').read().split("\n")
+version = open('Ctl/VERSION').read().strip()
+requirements = open('Ctl/requirements.txt').read().split("\n")
 
 setup(
     name='django-handleref',
@@ -23,7 +23,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=[
-      'django_handleref', 
+      'django_handleref',
       'django_handleref.rest'
     ],
     url = 'https://github.com/20c/django-handleref',
