@@ -16,9 +16,11 @@
 0.5.0:
   added:
   - django2.2 support
-Unreleased:
+0.6.0:
   added:
   - django3.0 support
+Unreleased:
+  added: []
   changed: []
   deprecated: []
   fixed: []

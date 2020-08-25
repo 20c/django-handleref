@@ -2,6 +2,9 @@
 
 
 ## Unreleased
+
+
+## 0.6.0
 ### Added
 - django3.0 support
 
