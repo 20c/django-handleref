@@ -17,7 +17,8 @@
   added:
   - django2.2 support
 Unreleased:
-  added: []
+  added:
+  - django3.0 support
   changed: []
   deprecated: []
   fixed: []
