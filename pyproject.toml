@@ -26,10 +26,11 @@ python = ">=3.6.1,<4.0"
 
 [tool.poetry.dev-dependencies]
 # test
-pytest = ">=6.0.1"
-pytest-django = ">=3.8.0"
+pytest = "^6"
+pytest-django = "^3.8"
 pytest-cov = "*"
 pytest-pythonpath = "*"
+tox = "^3.24"
 
 # lint
 bandit = "^1.6.2"
