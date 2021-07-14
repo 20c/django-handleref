@@ -38,6 +38,7 @@ def pytest_configure():
 
     settings.configure(
         ROOT_URLCONF="tests.urls",
+        SECRET_KEY="mPqac6DEtYxY-0Mu946UUpg-YDVmXWkYj6L4rIE15_A",
         MIDDLEWARE=[
             'django.middleware.security.SecurityMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
