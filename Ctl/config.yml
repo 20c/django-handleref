@@ -5,6 +5,50 @@ ctl:
     - type: changelog
       name: changelog
 
+    # git repo for copying setup
+
+    - name: repo_tmpl_python
+      type: git
+      config:
+        repo_url: git@github.com:20c/ctl-tmpl-python
+        branch: origin/mvbase
+
+    # template for copying template assets
+
+    - name: python_template
+      type: template
+      config:
+        # template root directory (path)
+        source: "{{ ctx.cachedir }}/github.com/20c/ctl-tmpl-python/base"
+        # template output directory (path)
+        output: "{{ ctx.home }}/.."
+        walk_dirs:
+          - .
+        vars:
+          - Ctl/tmplvars.yaml
+        ignore:
+          - \.git/
+          - README.md
+
+    # chain plugin for entire template process
+
+    - name: sync_tmpl
+      type: chain
+      config:
+        chain:
+          - stage: git_clone
+            plugin: repo_tmpl_python
+            action:
+              name: clone
+
+          - stage: git_pull
+            plugin: repo_tmpl_python
+            action:
+              name: pull
+
+          - stage: python_template
+            plugin: python_template
+
   permissions:
     - namespace: "ctl"
       permission: "crud"
