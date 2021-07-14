@@ -1,11 +1,9 @@
-from django.db import models
-from django.contrib.admin import ModelAdmin, register
-
 import reversion
+from django.contrib.admin import ModelAdmin, register
+from django.db import models
 
 from django_handleref.admin import VersionAdmin
-
-from tests.models import Org, HandleRefModel
+from tests.models import HandleRefModel, Org
 
 
 @reversion.register
@@ -15,7 +13,7 @@ class VersionedOrg(HandleRefModel):
     notes = models.TextField(blank=True)
 
     class HandleRef:
-        tag = 'org'
+        tag = "org"
         delete_cascade = ["sub_entities"]
 
     def __unicode__(self):
@@ -25,5 +23,3 @@ class VersionedOrg(HandleRefModel):
 @register(VersionedOrg)
 class OrgAdmin(VersionAdmin, ModelAdmin):
     pass
-
-

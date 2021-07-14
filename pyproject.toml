@@ -19,7 +19,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
 ]
 
-packages = [{ include = "django-handleref", from = "src" }]
+packages = [{ include = "django_handleref", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.6.1,<4.0"

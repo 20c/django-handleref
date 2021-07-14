@@ -1,5 +1,4 @@
 import datetime
-
 import numbers
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -20,9 +19,9 @@ class HandleRefQuerySet(models.QuerySet):
         returns datetime or None if db is empty
         """
         try:
-            cdt = self.latest('created')
-            udt = self.latest('updated')
-            #print cdt, udt
+            cdt = self.latest("created")
+            udt = self.latest("updated")
+            # print cdt, udt
             return max(cdt.created, udt.updated)
 
         except ObjectDoesNotExist:
@@ -53,8 +52,7 @@ class HandleRefQuerySet(models.QuerySet):
                 timestamp = datetime.datetime.fromtimestamp(timestamp)
 
             qset = qset.filter(
-                models.Q(created__gt=timestamp) |
-                models.Q(updated__gt=timestamp)
+                models.Q(created__gt=timestamp) | models.Q(updated__gt=timestamp)
             )
 
         if version is not None:

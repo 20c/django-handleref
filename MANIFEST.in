@@ -1,4 +1,4 @@
 include Ctl/requirements.txt
 include Ctl/VERSION
-include django_handleref/templates/handleref/*.html 
-include django_handleref/templates/handleref/grappelli/*.html 
+include django_handleref/templates/handleref/*.html
+include django_handleref/templates/handleref/grappelli/*.html

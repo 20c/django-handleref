@@ -10,10 +10,10 @@
 track when an object was created or changed and allow querying based on time and versioning (w/ django-reversion support)
 
 ## HandleRefModel as a base for all your models
-    
+
     from django.db import models
     from django_handleref.models import HandleRefModel
-    
+
     class Test(HandleRefModel):
         name = models.CharField(max_length=255)
 
@@ -65,7 +65,7 @@ Note that this currently wont work for batch deletes - as this does not call the
 
 ## Versioning (with django-reversion)
 
-Requires 
+Requires
 
     django-reversion==1.8.7
 
@@ -76,9 +76,9 @@ When django-reversion is installed all your HandleRefModels will be valid for ve
     with reversion.create_revision():
         obj = Test.objects.create(name="This is a test")
         obj.save()
-  
+
         obj.version #1
-        
+
         obj.name = "Changed my mind"
         obj.save()
 
