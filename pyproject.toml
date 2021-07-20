@@ -32,8 +32,8 @@ pytest-cov = "*"
 pytest-pythonpath = "*"
 tox = ">=3.24"
 
-# lint
-bandit = "^1.6.2"
+# linting
+#bandit = ">=1.6.2"
 black = { version = ">=20", allow-prereleases = true }
 isort = ">=5.7.0"
 flake8 = ">=3.8.4"
