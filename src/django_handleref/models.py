@@ -19,7 +19,7 @@ except ImportError:
 
 
 class CreatedDateTimeField(models.DateTimeField):
-    """ DateTimeField that's set to now() on create """
+    """DateTimeField that's set to now() on create"""
 
     def __init__(self, verbose_name=None, name=None, **kwargs):
         if not verbose_name:
@@ -32,7 +32,7 @@ class CreatedDateTimeField(models.DateTimeField):
 
 
 class UpdatedDateTimeField(models.DateTimeField):
-    """ DateTimeField that's set to now() every update """
+    """DateTimeField that's set to now() every update"""
 
     def __init__(self, verbose_name=None, name=None, **kwargs):
         if not verbose_name:
