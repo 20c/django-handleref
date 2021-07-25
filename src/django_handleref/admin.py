@@ -1,16 +1,15 @@
-import re
 import logging
+import re
 import traceback
 
-from django.conf.urls import url
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-from django.contrib import admin
 from django import forms
-from django.template.response import TemplateResponse
-from django.shortcuts import redirect
-
+from django.conf.urls import url
+from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
+from django.core.exceptions import ValidationError
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger("django")
 
@@ -24,7 +23,7 @@ except ImportError:
 
 
 # we only support reversion at this point
-from django_handleref.version import ReversionVersion, ReversionReverter
+from django_handleref.version import ReversionReverter, ReversionVersion
 
 
 class HistoryActionsForm(forms.Form):
@@ -58,38 +57,50 @@ class VersionAdmin(admin.ModelAdmin):
     #
     # so `version_id` will go to Version.id for example
 
-    version_list_fields = [("version_id", _("Version ID")),
-                           ("version", _("Version")),
-                           ("version_date", _("Date")),
-                           ("version_user", _("User")),
-                           ("status", _("Object Status")),
-                           ("version_changes", _("Changes")),
-                          ]
-
+    version_list_fields = [
+        ("version_id", _("Version ID")),
+        ("version", _("Version")),
+        ("version_date", _("Date")),
+        ("version_user", _("User")),
+        ("status", _("Object Status")),
+        ("version_changes", _("Changes")),
+    ]
 
     def get_urls(self):
-        urls = super(VersionAdmin, self).get_urls()
+        urls = super().get_urls()
         opts = self.model._meta
-        info = opts.app_label, opts.model_name,
+        info = (
+            opts.app_label,
+            opts.model_name,
+        )
         my_urls = [
-                   url(r"^([^/]+)/history/revert/process/$",
-                       self.admin_site.admin_view(self.version_revert_process),
-                       name='%s_%s_version_revert_process' % info),
-                   url(r"^([^/]+)/history/revert/$",
-                       self.admin_site.admin_view(self.version_revert_view),
-                       name='%s_%s_version_revert' % info),
-                   url(r"^([^/]+)/history/(\d+)/rollback/process/$",
-                       self.admin_site.admin_view(self.version_rollback_process),
-                       name='%s_%s_version_rollback_process' % info),
-                   url(r"^([^/]+)/history/(\d+)/rollback/$",
-                       self.admin_site.admin_view(self.version_rollback_view),
-                       name='%s_%s_version_rollback' % info),
-                   url(r"^([^/]+)/history/(\d+)/$",
-                       self.admin_site.admin_view(self.version_details_view),
-                       name='%s_%s_version' % info),
-                  ]
+            url(
+                r"^([^/]+)/history/revert/process/$",
+                self.admin_site.admin_view(self.version_revert_process),
+                name="%s_%s_version_revert_process" % info,
+            ),
+            url(
+                r"^([^/]+)/history/revert/$",
+                self.admin_site.admin_view(self.version_revert_view),
+                name="%s_%s_version_revert" % info,
+            ),
+            url(
+                r"^([^/]+)/history/(\d+)/rollback/process/$",
+                self.admin_site.admin_view(self.version_rollback_process),
+                name="%s_%s_version_rollback_process" % info,
+            ),
+            url(
+                r"^([^/]+)/history/(\d+)/rollback/$",
+                self.admin_site.admin_view(self.version_rollback_view),
+                name="%s_%s_version_rollback" % info,
+            ),
+            url(
+                r"^([^/]+)/history/(\d+)/$",
+                self.admin_site.admin_view(self.version_details_view),
+                name="%s_%s_version" % info,
+            ),
+        ]
         return my_urls + urls
-
 
     def history_query_set(self, object_id):
         """
@@ -105,14 +116,13 @@ class VersionAdmin(admin.ModelAdmin):
 
         instance = self.model.objects.get(pk=object_id)
 
-        #TODO: abstract this away from reversion
-        #we are only supporting django-reversion it this point
-        #so it's ok for now
+        # TODO: abstract this away from reversion
+        # we are only supporting django-reversion it this point
+        # so it's ok for now
 
         history_qset = reversion.models.Version.objects.get_for_object(instance)
-        history_qset = history_qset.order_by('-revision_id')
+        history_qset = history_qset.order_by("-revision_id")
         return history_qset
-
 
     def history_entry(self, version, previous):
 
@@ -132,7 +142,7 @@ class VersionAdmin(admin.ModelAdmin):
         """
 
         fields = []
-        entry = {"id": version.id, "fields":fields, "comment":version.comment}
+        entry = {"id": version.id, "fields": fields, "comment": version.comment}
 
         for field, label in self.version_list_fields:
             if field == "version_changes":
@@ -142,9 +152,8 @@ class VersionAdmin(admin.ModelAdmin):
             elif field.find("version_") == 0:
                 fields.append((field, getattr(version, field.split("_")[1])))
             else:
-                fields.append((field, version.data.get(field,'')))
+                fields.append((field, version.data.get(field, "")))
         return entry
-
 
     def history(self, history_qset):
         """
@@ -174,7 +183,6 @@ class VersionAdmin(admin.ModelAdmin):
 
         return history
 
-
     def history_view(self, request, object_id):
 
         """
@@ -196,7 +204,7 @@ class VersionAdmin(admin.ModelAdmin):
             return self.version_revert_view(request, object_id)
 
         history_qset = self.history_query_set(object_id)
-        listing=HistoryListing(self, request, history_qset)
+        listing = HistoryListing(self, request, history_qset)
         history = self.history(listing.result_list)
 
         context = dict(
@@ -209,10 +217,10 @@ class VersionAdmin(admin.ModelAdmin):
             listing=listing,
             version_list_fields=self.version_list_fields,
             field_count=len(self.version_list_fields),
-            title=_("Version History"))
+            title=_("Version History"),
+        )
 
-        return super(VersionAdmin, self).history_view(request, object_id, context)
-
+        return super().history_view(request, object_id, context)
 
     def version_details_view(self, request, object_id, version_id, extra_context=None):
 
@@ -225,7 +233,7 @@ class VersionAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return redirect("admin:login")
 
-        version=self.version_cls(reversion.models.Version.objects.get(id=version_id))
+        version = self.version_cls(reversion.models.Version.objects.get(id=version_id))
         previous = version.previous
         context = dict(
             self.admin_site.each_context(request),
@@ -236,10 +244,9 @@ class VersionAdmin(admin.ModelAdmin):
             version=version,
             previous=previous,
             changes=version.changes(previous),
-            )
+        )
         context.update(extra_context or {})
         return TemplateResponse(request, self.version_details_template, context)
-
 
     def version_revert_view(self, request, object_id, extra_context=None):
 
@@ -252,11 +259,15 @@ class VersionAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return redirect("admin:login")
 
-        version_ids = request.GET.getlist("version_id", request.POST.getlist("version_id",[]))
+        version_ids = request.GET.getlist(
+            "version_id", request.POST.getlist("version_id", [])
+        )
         if not isinstance(version_ids, list):
             version_ids = [version_ids]
-        versions = [self.version_cls(reversion.models.Version.objects.get(id=version_id))
-                    for version_id in version_ids]
+        versions = [
+            self.version_cls(reversion.models.Version.objects.get(id=version_id))
+            for version_id in version_ids
+        ]
 
         changes = self.version_cls.changes_summary(versions)
 
@@ -268,10 +279,9 @@ class VersionAdmin(admin.ModelAdmin):
             versions=versions,
             count=len(versions),
             changes=changes,
-            )
+        )
         context.update(extra_context or {})
         return TemplateResponse(request, self.version_revert_template, context)
-
 
     def version_revert_process(self, request, object_id, extra_context=None):
 
@@ -290,7 +300,7 @@ class VersionAdmin(admin.ModelAdmin):
 
         field_versions = {}
 
-        for key,value in request.POST.items():
+        for key, value in request.POST.items():
             m = re.match("field_(.+)", key)
             if not m:
                 continue
@@ -324,16 +334,20 @@ class VersionAdmin(admin.ModelAdmin):
         # and include error information
 
         if errors:
-            return self.version_revert_view(request, object_id, extra_context={"errors":errors})
+            return self.version_revert_view(
+                request, object_id, extra_context={"errors": errors}
+            )
 
         opts = self.model._meta
 
         # on success return to the object history view
 
-        return redirect("{}:{}_{}_history".format(self.admin_site.name,
-                                                  opts.app_label, opts.model_name), instance.id)
-
-
+        return redirect(
+            "{}:{}_{}_history".format(
+                self.admin_site.name, opts.app_label, opts.model_name
+            ),
+            instance.id,
+        )
 
     def version_rollback_view(self, request, object_id, version_id, extra_context=None):
 
@@ -346,7 +360,7 @@ class VersionAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return redirect("admin:login")
 
-        version=self.version_cls(int(version_id))
+        version = self.version_cls(int(version_id))
 
         context = dict(
             self.admin_site.each_context(request),
@@ -354,12 +368,13 @@ class VersionAdmin(admin.ModelAdmin):
             instance=self.model.objects.get(id=object_id),
             opts=self.model._meta,
             version=version,
-            )
+        )
         context.update(extra_context or {})
         return TemplateResponse(request, self.version_rollback_template, context)
 
-
-    def version_rollback_process(self, request, object_id, version_id, extra_context=None):
+    def version_rollback_process(
+        self, request, object_id, version_id, extra_context=None
+    ):
 
         """
         Version rollback process
@@ -370,7 +385,7 @@ class VersionAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return redirect("admin:login")
 
-        version=self.version_cls(int(version_id))
+        version = self.version_cls(int(version_id))
 
         errors = {}
         try:
@@ -398,17 +413,20 @@ class VersionAdmin(admin.ModelAdmin):
         # view again with error information
 
         if errors:
-            return self.version_rollback_view(request, object_id, version_id, extra_context={"errors":errors})
+            return self.version_rollback_view(
+                request, object_id, version_id, extra_context={"errors": errors}
+            )
 
         opts = self.model._meta
 
         # on success return to object history
 
-        return redirect("{}:{}_{}_history".format(self.admin_site.name,
-                                                  opts.app_label, opts.model_name), instance.id)
-
-
-
+        return redirect(
+            "{}:{}_{}_history".format(
+                self.admin_site.name, opts.app_label, opts.model_name
+            ),
+            instance.id,
+        )
 
 
 class HistoryListing(ChangeList):
@@ -420,7 +438,7 @@ class HistoryListing(ChangeList):
 
     def __init__(self, model_admin, request, qset):
         try:
-            self.page_num = int(request.GET.get("p",0))
+            self.page_num = int(request.GET.get("p", 0))
         except ValueError:
             self.page_num = 0
 
@@ -437,8 +455,7 @@ class HistoryListing(ChangeList):
         self.result_list = self.paginator.page(self.page_num + 1).object_list
 
         self.params = dict(request.GET.items())
-        if 'p' in self.params:
-            del self.params['p']
-        if 'e' in self.params:
-            del self.params['e']
-
+        if "p" in self.params:
+            del self.params["p"]
+        if "e" in self.params:
+            del self.params["e"]

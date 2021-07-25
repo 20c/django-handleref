@@ -6,7 +6,8 @@ try:
 except ImportError:
     reversion = None
 
-class Version(object):
+
+class Version:
 
     """
     Object version interface - extend to support
@@ -32,7 +33,6 @@ class Version(object):
         """
         raise NotImplementedError()
 
-
     @property
     def user(self):
         """
@@ -40,7 +40,6 @@ class Version(object):
         or None if no such user exists
         """
         raise NotImplementedError()
-
 
     @property
     def id(self):
@@ -50,7 +49,6 @@ class Version(object):
         """
         raise NotImplementedError()
 
-
     @property
     def comment(self):
         """
@@ -58,7 +56,6 @@ class Version(object):
         or None if no such comment exists
         """
         raise NotImplementedError()
-
 
     @property
     def data(self):
@@ -69,7 +66,6 @@ class Version(object):
         """
         raise NotImplementedError()
 
-
     @property
     def data_sorted(self):
         """
@@ -78,7 +74,6 @@ class Version(object):
         """
         raise NotImplementedError()
 
-
     @property
     def model(self):
         """
@@ -86,7 +81,6 @@ class Version(object):
         snapshotted by the version
         """
         raise NotImplementedError()
-
 
     @property
     def previous(self):
@@ -99,7 +93,6 @@ class Version(object):
         """
         raise NotImplementedError()
 
-
     @property
     def next(self):
         """
@@ -110,7 +103,6 @@ class Version(object):
         instance
         """
         raise NotImplementedError()
-
 
     @classmethod
     def changes_summary(self, versions):
@@ -138,7 +130,7 @@ class Version(object):
             for field, diff in _changes.items():
                 if field not in changes:
                     changes[field] = {}
-                _diff = {"version":version}
+                _diff = {"version": version}
                 _diff.update(diff)
                 changes[field].update({version.id: _diff})
         changes_list = list(changes.items())
@@ -161,7 +153,6 @@ class Version(object):
         """
 
         return Diff(previous, self).changes
-
 
     def changed_fields(self, previous):
 
@@ -199,10 +190,9 @@ class ReversionVersion(Version):
                 a reversion version instance or the id of one
 
         """
-        if isinstance(version, six.integer_types):
+        if isinstance(version, int):
             version = reversion.models.Version.objects.get(id=version)
-        super(ReversionVersion, self).__init__(version)
-
+        super().__init__(version)
 
     @property
     def date(self):
@@ -213,7 +203,6 @@ class ReversionVersion(Version):
 
         """
         return self.version.revision.date_created
-
 
     @property
     def user(self):
@@ -226,7 +215,6 @@ class ReversionVersion(Version):
         """
         return self.version.revision.user
 
-
     @property
     def comment(self):
         """
@@ -238,7 +226,6 @@ class ReversionVersion(Version):
         """
         return self.version.revision.comment
 
-
     @property
     def id(self):
         """
@@ -248,7 +235,6 @@ class ReversionVersion(Version):
 
         """
         return self.version.id
-
 
     @property
     def data(self):
@@ -271,7 +257,6 @@ class ReversionVersion(Version):
         """
         return self.version._model
 
-
     @property
     def data_sorted(self):
         """
@@ -288,7 +273,6 @@ class ReversionVersion(Version):
 
         return sorted(data, key=lambda i: i[0])
 
-
     @property
     def previous(self):
         """
@@ -301,13 +285,14 @@ class ReversionVersion(Version):
 
         if hasattr(self, "_previous"):
             return self._previous
-        qset = reversion.models.Version.objects.filter(content_type_id=self.version.content_type_id,
-                                                object_id=self.version.object_id,
-                                                id__lt=self.version.id)
+        qset = reversion.models.Version.objects.filter(
+            content_type_id=self.version.content_type_id,
+            object_id=self.version.object_id,
+            id__lt=self.version.id,
+        )
         qset = qset.order_by("-id")
         self._previous = self.__class__(qset.first())
         return self._previous
-
 
     @property
     def next(self):
@@ -321,15 +306,17 @@ class ReversionVersion(Version):
 
         if hasattr(self, "_next"):
             return self._next
-        qset = reversion.models.Version.objects.filter(content_type_id=self.version.content_type_id,
-                                                object_id=self.version.object_id,
-                                                id__gt=self.version.id)
+        qset = reversion.models.Version.objects.filter(
+            content_type_id=self.version.content_type_id,
+            object_id=self.version.object_id,
+            id__gt=self.version.id,
+        )
         qset = qset.order_by("id")
         self._next = self.__class__(qset.first())
         return self._next
 
 
-class Diff(object):
+class Diff:
 
     """
     Describes changes between two versions
@@ -337,10 +324,11 @@ class Diff(object):
 
     # when generating diff ignore these fields
 
-    diff_ignore_fields = ["version",
-                          "created",
-                          "updated",
-                          ]
+    diff_ignore_fields = [
+        "version",
+        "created",
+        "updated",
+    ]
 
     def __init__(self, version_a, version_b):
 
@@ -354,7 +342,6 @@ class Diff(object):
 
         self.version_a = version_a
         self.version_b = version_b
-
 
     @property
     def changes(self):
@@ -399,21 +386,21 @@ class Diff(object):
             if value_a == value_b:
                 continue
 
-            if isinstance(value_a, six.string_types) or isinstance(value_a, six.integer_types):
-                diff[field] = {"old":value_a, "changed":value_b}
+            if isinstance(value_a, str) or isinstance(value_a, int):
+                diff[field] = {"old": value_a, "changed": value_b}
             else:
-                diff[field] = {"old":self.format_value(value_a),
-                               "changed":self.format_value(value_b)}
+                diff[field] = {
+                    "old": self.format_value(value_a),
+                    "changed": self.format_value(value_b),
+                }
 
         return diff
 
-
     def format_value(self, value):
-        return u"{}".format(value)
+        return f"{value}"
 
 
-
-class Reverter(object):
+class Reverter:
 
     """
     Allows to revert / rollback changes
@@ -444,7 +431,6 @@ class Reverter(object):
         instance.full_clean()
         instance.save()
 
-
     def rollback(self, instance, version, **kwargs):
 
         """
@@ -463,14 +449,13 @@ class Reverter(object):
         """
 
         for field, value in version.data.items():
-            if field in ["created","updated","version"]:
+            if field in ["created", "updated", "version"]:
                 continue
             if field == "status":
                 self.validate_status_change(instance, value)
             setattr(instance, field, value)
         instance.full_clean()
         instance.save()
-
 
     def validate_status_change(self, instance, status):
 
@@ -496,17 +481,19 @@ class Reverter(object):
                 continue
             self.validate_parent_status(instance, relation, status)
 
-
     def validate_parent_status(self, instance, parent, status):
 
         if not hasattr(parent, "HandleRef"):
             return
 
         if parent.status == "deleted" and status != "deleted":
-            raise ValidationError({"non_field_errors":"Parent object {} is currently flagged as deleted."\
-                                  "This object may not be undeleted while the parent "\
-                                  "is still deleted.".format(parent)})
-
+            raise ValidationError(
+                {
+                    "non_field_errors": "Parent object {} is currently flagged as deleted."
+                    "This object may not be undeleted while the parent "
+                    "is still deleted.".format(parent)
+                }
+            )
 
 
 class ReversionReverter(Reverter):
@@ -514,7 +501,6 @@ class ReversionReverter(Reverter):
     """
     Reverter abstraction for django-reversion
     """
-
 
     def revert_fields(self, instance, field_versions, user=None):
 
@@ -538,15 +524,18 @@ class ReversionReverter(Reverter):
 
         """
 
-
         with reversion.create_revision():
             if user:
                 reversion.set_user(user)
-            version_ids = [u"{}".format(version.data["version"]) for version in field_versions.values()]
+            version_ids = [
+                "{}".format(version.data["version"])
+                for version in field_versions.values()
+            ]
             version_ids = list(set(version_ids))
-            reversion.set_comment("reverted some fields via versions: {}".format(", ".join(version_ids)))
-            super(ReversionReverter, self).revert_fields(instance, field_versions)
-
+            reversion.set_comment(
+                "reverted some fields via versions: {}".format(", ".join(version_ids))
+            )
+            super().revert_fields(instance, field_versions)
 
     def rollback(self, instance, version, user=None):
 
@@ -572,6 +561,7 @@ class ReversionReverter(Reverter):
         with reversion.create_revision():
             if user:
                 reversion.set_user(user)
-            reversion.set_comment("rollback to version {}".format(version.data["version"]))
-            super(ReversionReverter, self).rollback(instance, version)
-
+            reversion.set_comment(
+                "rollback to version {}".format(version.data["version"])
+            )
+            super().rollback(instance, version)

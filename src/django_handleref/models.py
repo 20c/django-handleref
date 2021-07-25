@@ -1,9 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from six import with_metaclass
 
 from django_handleref.manager import HandleRefManager
-
-from six import with_metaclass
 
 try:
     import reversion.signals
@@ -20,30 +19,32 @@ except ImportError:
 
 
 class CreatedDateTimeField(models.DateTimeField):
-    """ DateTimeField that's set to now() on create """
+    """DateTimeField that's set to now() on create"""
+
     def __init__(self, verbose_name=None, name=None, **kwargs):
         if not verbose_name:
-            verbose_name = _('Created')
+            verbose_name = _("Created")
 
         # force timestamp options
-        kwargs['auto_now'] = False
-        kwargs['auto_now_add'] = True
+        kwargs["auto_now"] = False
+        kwargs["auto_now_add"] = True
         super(models.DateTimeField, self).__init__(verbose_name, name, **kwargs)
 
 
 class UpdatedDateTimeField(models.DateTimeField):
-    """ DateTimeField that's set to now() every update """
+    """DateTimeField that's set to now() every update"""
+
     def __init__(self, verbose_name=None, name=None, **kwargs):
         if not verbose_name:
-            verbose_name = _('Updated')
+            verbose_name = _("Updated")
 
         # force timestamp options
-        kwargs['auto_now'] = True
-        kwargs['auto_now_add'] = False
+        kwargs["auto_now"] = True
+        kwargs["auto_now_add"] = False
         super(models.DateTimeField, self).__init__(verbose_name, name, **kwargs)
 
 
-class HandleRefOptions(object):
+class HandleRefOptions:
     delete_cascade = []
 
     def __init__(self, cls, opts):
@@ -53,13 +54,13 @@ class HandleRefOptions(object):
                     continue
                 setattr(self, key, value)
 
-        if not getattr(self, 'tag', None):
+        if not getattr(self, "tag", None):
             self.tag = cls.__name__.lower()
 
 
 class HandleRefMeta(models.base.ModelBase):
     def __new__(cls, name, bases, attrs):
-        super_new = super(HandleRefMeta, cls).__new__
+        super_new = super().__new__
 
         # only init subclass
         parents = [b for b in bases if isinstance(b, HandleRefMeta)]
@@ -67,15 +68,15 @@ class HandleRefMeta(models.base.ModelBase):
             return super_new(cls, name, bases, attrs)
 
         new = super_new(cls, name, bases, attrs)
-        opts = attrs.pop('HandleRef', None)
+        opts = attrs.pop("HandleRef", None)
         if not opts:
-            opts = getattr(new, 'HandleRef', None)
+            opts = getattr(new, "HandleRef", None)
 
-        setattr(new, '_handleref', HandleRefOptions(new, opts))
+        setattr(new, "_handleref", HandleRefOptions(new, opts))
         return new
 
 
-class HandleRefModel(with_metaclass(HandleRefMeta, models.Model)):
+class HandleRefModel(models.Model, metaclass=HandleRefMeta):
     """
     Provides timestamps for creation and change times,
     versioning (using django-reversion) as well as
@@ -83,7 +84,7 @@ class HandleRefModel(with_metaclass(HandleRefMeta, models.Model)):
     """
 
     id = models.AutoField(primary_key=True)
-    status = models.CharField(_('Status'), max_length=255, blank=True)
+    status = models.CharField(_("Status"), max_length=255, blank=True)
     created = CreatedDateTimeField()
     updated = UpdatedDateTimeField()
     version = models.IntegerField(default=0)
@@ -91,10 +92,13 @@ class HandleRefModel(with_metaclass(HandleRefMeta, models.Model)):
     handleref = HandleRefManager()
     objects = models.Manager()
 
-    class Meta(object):
+    class Meta:
         abstract = True
-        get_latest_by = 'updated'
-        ordering = ('-updated', '-created',)
+        get_latest_by = "updated"
+        ordering = (
+            "-updated",
+            "-created",
+        )
 
     @property
     def ref_tag(self):
@@ -113,7 +117,7 @@ class HandleRefModel(with_metaclass(HandleRefMeta, models.Model)):
             name = self.__class__.__name__
         else:
             name = self.name
-        return name + '-' + self.handle
+        return name + "-" + self.handle
 
     def delete(self, hard=False):
 

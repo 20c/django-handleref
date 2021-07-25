@@ -2,18 +2,18 @@
 # django-handleref
 
 [![PyPI](https://img.shields.io/pypi/v/django-handleref.svg?maxAge=3600)](https://pypi.python.org/pypi/django-handleref)
-[![Travis CI](https://img.shields.io/travis/20c/django-handleref.svg?maxAge=3600)](https://travis-ci.org/20c/django-handleref)
-[![Code Health](https://landscape.io/github/20c/django-handleref/master/landscape.svg?style=flat)](https://landscape.io/github/20c/django-handleref/master)
+[![PyPI](https://img.shields.io/pypi/pyversions/django-handleref.svg?maxAge=600)](https://pypi.python.org/pypi/django-handleref)
+[![Tests](https://github.com/20c/django-handleref/workflows/tests/badge.svg)](https://github.com/20c/django-handleref)
+[![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/20c/django-handleref)](https://lgtm.com/projects/g/20c/django-handleref/alerts/)
 [![Codecov](https://img.shields.io/codecov/c/github/20c/django-handleref/master.svg?maxAge=3600)](https://codecov.io/github/20c/django-handleref)
-[![Requires.io](https://img.shields.io/requires/github/20c/django-handleref.svg?maxAge=3600)](https://requires.io/github/20c/django-handleref/requirements)
 
 track when an object was created or changed and allow querying based on time and versioning (w/ django-reversion support)
 
 ## HandleRefModel as a base for all your models
-    
+
     from django.db import models
     from django_handleref.models import HandleRefModel
-    
+
     class Test(HandleRefModel):
         name = models.CharField(max_length=255)
 
@@ -65,7 +65,7 @@ Note that this currently wont work for batch deletes - as this does not call the
 
 ## Versioning (with django-reversion)
 
-Requires 
+Requires
 
     django-reversion==1.8.7
 
@@ -76,9 +76,9 @@ When django-reversion is installed all your HandleRefModels will be valid for ve
     with reversion.create_revision():
         obj = Test.objects.create(name="This is a test")
         obj.save()
-  
+
         obj.version #1
-        
+
         obj.name = "Changed my mind"
         obj.save()
 

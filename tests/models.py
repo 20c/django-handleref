@@ -1,5 +1,5 @@
-
 from django.db import models
+
 from django_handleref.models import HandleRefModel
 
 
@@ -9,18 +9,19 @@ class Org(HandleRefModel):
     notes = models.TextField(blank=True)
 
     class HandleRef:
-        tag = 'org'
+        tag = "org"
         delete_cascade = ["sub_entities"]
 
     def __unicode__(self):
         return self.name
+
 
 class Sub(HandleRefModel):
     name = models.CharField(max_length=255, unique=True)
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="sub_entities")
 
     class HandleRef:
-        tag = 'sub'
+        tag = "sub"
 
     def __unicode__(self):
         return self.name

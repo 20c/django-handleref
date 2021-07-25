@@ -1,29 +1,32 @@
 import datetime
+
 import pytest
-
-from django_handleref.version import (
-    Version,
-    Reverter,
-    ReversionVersion,
-    ReversionReverter,
-    Diff,
-    )
-
-from tests.reversion_models import VersionedOrg
-
 import reversion
 
-@pytest.mark.parametrize("field",[
-    "date",
-    "user",
-    "id",
-    "comment",
-    "data",
-    "data_sorted",
-    "model",
-    "previous",
-    "next",
-])
+from django_handleref.version import (
+    Diff,
+    ReversionReverter,
+    ReversionVersion,
+    Reverter,
+    Version,
+)
+from tests.reversion_models import VersionedOrg
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "date",
+        "user",
+        "id",
+        "comment",
+        "data",
+        "data_sorted",
+        "model",
+        "previous",
+        "next",
+    ],
+)
 def test_version_interface(field):
 
     version = Version(object())
@@ -35,31 +38,34 @@ def test_version_interface(field):
 def _test_changes(org, versions):
     version_a, version_b, version_c = versions
     changes = version_b.changes(version_a)
-    assert changes == {'name': {'old': u'Test', 'changed': u'Updated'}}
+    assert changes == {"name": {"old": "Test", "changed": "Updated"}}
 
 
 def _test_changes_summary(org, versions):
     version_a, version_b, version_c = versions
     changes = version_a.changes_summary([version_b, version_c])
 
-    assert changes[0] == ("name", {
-        version_b.id : {
-            "version" : version_b,
-            "old" : u"Test",
-            "changed" : u"Updated",
+    assert changes[0] == (
+        "name",
+        {
+            version_b.id: {
+                "version": version_b,
+                "old": "Test",
+                "changed": "Updated",
+            },
+            version_c.id: {
+                "version": version_c,
+                "old": "Updated",
+                "changed": "Again",
+            },
         },
-        version_c.id : {
-            "version" : version_c,
-            "old" : u"Updated",
-            "changed" : u"Again",
-        }
-    })
+    )
 
 
 def _test_changed_fields(org, versions):
     version_a, version_b, version_c = versions
     changed_fields = version_b.changed_fields(version_a)
-    assert changed_fields == [u"name"]
+    assert changed_fields == ["name"]
 
 
 def _test_revert_fields(org, versions, reverter):
@@ -68,8 +74,7 @@ def _test_revert_fields(org, versions, reverter):
     assert org.name == "Again"
     assert org.website == "http://localhost"
 
-    reverter.revert_fields(org, {"name": version_a,
-                                 "website": version_b})
+    reverter.revert_fields(org, {"name": version_a, "website": version_b})
 
     org.refresh_from_db()
 
@@ -94,6 +99,7 @@ def _test_rollback(org, versions, reverter):
 
 
 # TEST WITH REVERSION AS VERSIONING BACKEND
+
 
 @pytest.mark.django_db
 def test_reversion_version_fields(db):
@@ -127,19 +133,19 @@ def test_reversion_version_fields(db):
     assert version.user == None
     assert isinstance(version.date, datetime.datetime)
     assert version.model == VersionedOrg
-    assert version.data_sorted == [("created", version.data["created"]),
-                                   ("id", 1),
-                                   ("name", u"Updated"),
-                                   ("notes",u""),
-                                   ("status", u"ok"),
-                                   ("updated", version.data["updated"]),
-                                   ("version", 1),
-                                   ("website", u""),
-                                   ]
+    assert version.data_sorted == [
+        ("created", version.data["created"]),
+        ("id", 1),
+        ("name", "Updated"),
+        ("notes", ""),
+        ("status", "ok"),
+        ("updated", version.data["updated"]),
+        ("version", 1),
+        ("website", ""),
+    ]
 
     version = version.previous
     assert version.id == 1
-
 
 
 @pytest.mark.django_db

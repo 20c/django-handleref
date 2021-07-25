@@ -1,8 +1,10 @@
-import pytest
 import time
 
-from tests.models import *
+import pytest
 from django.test import TestCase
+
+from tests.models import *
+
 
 class ManagerTests(TestCase):
     """
@@ -21,13 +23,12 @@ class ManagerTests(TestCase):
         cls.orgs[8].delete()
         cls.orgs[9].delete(hard=True)
 
-
     def test_last_change(self):
         org = self.orgs[8]
         self.assertEqual(Org.handleref.last_change(), org.updated)
-    
+
     def test_since(self):
-        
+
         org = self.orgs[0]
         t = time.time()
 
@@ -43,7 +44,6 @@ class ManagerTests(TestCase):
         self.assertEqual(qset.count(), 1)
         self.assertEqual(qset.first().id, org.id)
 
-
         # we also want to check that org #8 is in the qset when
         # the deleted parameter is passed as true
         qset = Org.handleref.since(timestamp=self.initTime, deleted=True)
@@ -53,7 +53,6 @@ class ManagerTests(TestCase):
         qset = Org.handleref.since(timestamp=self.initTime, deleted=True)
         self.assertIn(self.orgs[8].id, [o.id for o in qset])
 
-    
     def test_undeleted(self):
         qset = Org.handleref.undeleted()
         self.assertNotIn(self.orgs[8].id, [o.id for o in qset])
