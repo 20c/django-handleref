@@ -89,7 +89,7 @@ When django-reversion is installed all your HandleRefModels will be valid for ve
 
 ### License
 
-Copyright 2015-2017 20C, LLC
+Copyright 2015-2021 20C, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this softare except in compliance with the License.

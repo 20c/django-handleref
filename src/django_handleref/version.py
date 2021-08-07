@@ -1,4 +1,3 @@
-import six
 from django.core.exceptions import ValidationError
 
 try:
@@ -477,7 +476,7 @@ class Reverter:
                 continue
             try:
                 relation = getattr(instance, field.name)
-            except:
+            except Exception:
                 continue
             self.validate_parent_status(instance, relation, status)
 

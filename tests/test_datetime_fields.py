@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytest
 from django.test import TestCase
 
-from tests.models import *
+from tests.models import Org, Sub, Widget
 
 data_org = {"name": "Acme Widgets"}
 

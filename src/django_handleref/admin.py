@@ -3,7 +3,7 @@ import re
 import traceback
 
 from django import forms
-from django.conf.urls import url
+from django.conf.urls import re_path
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.exceptions import ValidationError
@@ -11,19 +11,17 @@ from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
-logger = logging.getLogger("django")
-
 # soft import reversion - since it is not a hard
 # requirement for django-handleref
-
 try:
     import reversion
 except ImportError:
     reversion = None
 
-
 # we only support reversion at this point
 from django_handleref.version import ReversionReverter, ReversionVersion
+
+logger = logging.getLogger("django")
 
 
 class HistoryActionsForm(forms.Form):
@@ -74,27 +72,27 @@ class VersionAdmin(admin.ModelAdmin):
             opts.model_name,
         )
         my_urls = [
-            url(
+            re_path(
                 r"^([^/]+)/history/revert/process/$",
                 self.admin_site.admin_view(self.version_revert_process),
                 name="%s_%s_version_revert_process" % info,
             ),
-            url(
+            re_path(
                 r"^([^/]+)/history/revert/$",
                 self.admin_site.admin_view(self.version_revert_view),
                 name="%s_%s_version_revert" % info,
             ),
-            url(
+            re_path(
                 r"^([^/]+)/history/(\d+)/rollback/process/$",
                 self.admin_site.admin_view(self.version_rollback_process),
                 name="%s_%s_version_rollback_process" % info,
             ),
-            url(
+            re_path(
                 r"^([^/]+)/history/(\d+)/rollback/$",
                 self.admin_site.admin_view(self.version_rollback_view),
                 name="%s_%s_version_rollback" % info,
             ),
-            url(
+            re_path(
                 r"^([^/]+)/history/(\d+)/$",
                 self.admin_site.admin_view(self.version_details_view),
                 name="%s_%s_version" % info,
