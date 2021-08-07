@@ -4,6 +4,15 @@
 ## Unreleased
 
 
+## 1.0.0
+### Added
+- python 3.9
+- Django to current
+### Removed
+- python2 support
+- EOL Django support
+
+
 ## 0.6.0
 ### Added
 - django3.0 support

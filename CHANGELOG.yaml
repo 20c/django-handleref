@@ -1,19 +1,16 @@
 Unreleased:
   added: []
+  fixed: []
   changed: []
   deprecated: []
-  fixed: []
-  removed:
-  - python2 support
+  removed: []
   security: []
-
 0.2.0:
   added:
   - tox test django 1.8, 1.9, 1.10 and 1.11
   - support handle_version in later versions of reversion
   changed:
   - when soft-deleting dont re-save already deleted children
-
 0.3.0:
   added:
   - py3 compatibility
@@ -29,3 +26,10 @@ Unreleased:
 0.6.0:
   added:
   - django3.0 support
+1.0.0:
+  added:
+  - python 3.9
+  - Django to current
+  removed:
+  - python2 support
+  - EOL Django support
