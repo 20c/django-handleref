@@ -3,7 +3,7 @@ import time
 import pytest
 from django.test import TestCase
 
-from tests.models import *
+from tests.models import Org, Sub, Widget
 
 
 class ModelTests(TestCase):
@@ -11,7 +11,7 @@ class ModelTests(TestCase):
         org = Org()
         self.assertEqual("org", org.ref_tag)
         self.assertEqual("org", Org.handleref.tag)
-        with self.assertRaises(ValueError) as e:
+        with self.assertRaises(ValueError):
             org.handle
 
         widget = Widget()
@@ -49,5 +49,5 @@ class ModelTests(TestCase):
         org = Org.objects.create(name="TEST HARD DELETE", status="ok")
         self.assertEqual(org.status, "ok")
         org.delete(hard=True)
-        with self.assertRaises(Org.DoesNotExist) as e:
+        with self.assertRaises(Org.DoesNotExist):
             org.refresh_from_db()
