@@ -2,6 +2,8 @@
 
 
 ## Unreleased
+### Fixed
+- performance issues in admin version history view
 
 
 ## 1.0.0
