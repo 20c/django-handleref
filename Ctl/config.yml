@@ -5,6 +5,9 @@ ctl:
     - type: changelog
       name: changelog
 
+    - type: version
+      name: version
+
     # git repo for copying setup
 
     - name: repo_tmpl_python

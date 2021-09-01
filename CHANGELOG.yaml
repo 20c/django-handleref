@@ -1,3 +1,10 @@
+Unreleased:
+  added: []
+  fixed: []
+  changed: []
+  deprecated: []
+  removed: []
+  security: []
 0.2.0:
   added:
   - tox test django 1.8, 1.9, 1.10 and 1.11
@@ -19,10 +26,10 @@
 0.6.0:
   added:
   - django3.0 support
-Unreleased:
-  added: []
-  changed: []
-  deprecated: []
-  fixed: []
-  removed: []
-  security: []
+1.0.0:
+  added:
+  - python 3.9
+  - Django to current
+  removed:
+  - python2 support
+  - EOL Django support
