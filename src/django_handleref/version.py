@@ -285,7 +285,9 @@ class ReversionVersion(Version):
         if hasattr(self, "_previous"):
             return self._previous
 
-        versions = reversion.models.Version.objects.get_for_object(self.version.object).order_by("-id")
+        versions = reversion.models.Version.objects.get_for_object(
+            self.version.object
+        ).order_by("-id")
 
         for version in versions:
             if version.id < self.version.id:
