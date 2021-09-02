@@ -284,14 +284,17 @@ class ReversionVersion(Version):
 
         if hasattr(self, "_previous"):
             return self._previous
-        qset = reversion.models.Version.objects.filter(
-            content_type_id=self.version.content_type_id,
-            object_id=self.version.object_id,
-            id__lt=self.version.id,
-        )
-        qset = qset.order_by("-id")
-        self._previous = self.__class__(qset.first())
-        return self._previous
+
+        versions = reversion.models.Version.objects.get_for_object(
+            self.version.object
+        ).order_by("-id")
+
+        for version in versions:
+            if version.id < self.version.id:
+                self._previous = self.__class__(version)
+                return self._previous
+
+        return None
 
     @property
     def next(self):

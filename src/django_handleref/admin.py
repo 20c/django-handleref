@@ -170,6 +170,7 @@ class VersionAdmin(admin.ModelAdmin):
         history = []
 
         versions = [v for v in history_qset]
+
         versions.reverse()
 
         previous = self.version_cls(versions[0]).previous
