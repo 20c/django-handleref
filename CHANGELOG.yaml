@@ -1,7 +1,6 @@
 Unreleased:
   added: []
-  fixed:
-  - performance issues in admin version history view
+  fixed: []
   changed: []
   deprecated: []
   removed: []
@@ -34,3 +33,6 @@ Unreleased:
   removed:
   - python2 support
   - EOL Django support
+1.0.1:
+  fixed:
+  - performance issues in admin version history view
