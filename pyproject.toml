@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-handleref"
-version = "1.0.0"
+version = "1.0.1"
 description = "django object tracking"
 readme = "README.md"
 repository = "https://github.com/20c/django-handleref"
