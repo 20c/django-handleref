@@ -2,6 +2,8 @@
 
 
 ## Unreleased
+### Fixed
+- fix list index of range issue in version admin
 
 
 ## 1.0.1
