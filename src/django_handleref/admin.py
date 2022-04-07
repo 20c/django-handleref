@@ -173,6 +173,9 @@ class VersionAdmin(admin.ModelAdmin):
 
         versions.reverse()
 
+        # If there are no previous versions, return an empty history
+        if not versions:
+            return history
         previous = self.version_cls(versions[0]).previous
 
         for _version in versions:
