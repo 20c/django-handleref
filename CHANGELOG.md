@@ -4,6 +4,11 @@
 ## Unreleased
 
 
+## 1.0.2
+### Fixed
+- fix list index of range issue in version admin
+
+
 ## 1.0.1
 ### Fixed
 - performance issues in admin version history view
