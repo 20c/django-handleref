@@ -33,6 +33,7 @@ pytest-django = ">=3.8.0"
 pytest-cov = "*"
 pytest-pythonpath = "*"
 tox = ">=3.24"
+tox-gh-actions = ">=2.9.1"
 
 # linting
 #bandit = ">=1.6.2"
