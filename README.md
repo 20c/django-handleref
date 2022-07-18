@@ -7,7 +7,7 @@
 [![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/20c/django-handleref)](https://lgtm.com/projects/g/20c/django-handleref/alerts/)
 [![Codecov](https://img.shields.io/codecov/c/github/20c/django-handleref/master.svg?maxAge=3600)](https://codecov.io/github/20c/django-handleref)
 
-track when an object was created or changed and allow querying based on time and versioning (w/ django-reversion support)
+Track when an object was created or changed and allow querying based on time and versioning (w/ `django-reversion` support)
 
 ## HandleRefModel as a base for all your models
 
@@ -20,7 +20,7 @@ track when an object was created or changed and allow querying based on time and
 ## Querying for modification since
 
 It is now possible for you to see which instances of a model have been created or modified
-since a specific time or version
+since a specific time or version:
 
     import time
 
@@ -35,14 +35,14 @@ since a specific time or version
     test.save()
 
     # now we can use the handleref manager to retrieve it
-    Test.handleref.since(timestamp=t).count() # 1
-    Test.handleref.since(timestamp=time.time().count() #0
+    Test.handleref.since(timestamp=t).count() #1
+    Test.handleref.since(timestamp=time.time()).count() #0
 
 
 ## Soft delete
 
-By default all models extending HandleRefModel will softdelete when their delete() method is called.
-Note that this currently wont work for batch deletes - as this does not call the delete() method.
+By default, all models extending `HandleRefModel` will softdelete when their delete() method is called.
+Note that this currently won't work for batch deletes - as this does not call the delete() method.
 
     test = Test.objects.get(id=1)
     test.delete()
@@ -67,9 +67,9 @@ Note that this currently wont work for batch deletes - as this does not call the
 
 Requires
 
-    django-reversion==1.8.7
+    django-reversion>=3.0.0
 
-When django-reversion is installed all your HandleRefModels will be valid for versioning.
+When `django-reversion` is installed all your `HandleRefModel`s will be valid for versioning.
 
     import reversion
 
@@ -92,7 +92,7 @@ When django-reversion is installed all your HandleRefModels will be valid for ve
 Copyright 2015-2021 20C, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this softare except in compliance with the License.
+you may not use this software except in compliance with the License.
 You may obtain a copy of the License at
 
    http://www.apache.org/licenses/LICENSE-2.0
