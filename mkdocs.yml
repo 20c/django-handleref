@@ -1,0 +1,13 @@
+site_name: django-handleref
+site_url: https://github.com/20c/django-handleref
+
+theme: readthedocs
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+
+markdown_extensions:
+  - markdown_include.include
+  - admonition
+  - pymdgen
