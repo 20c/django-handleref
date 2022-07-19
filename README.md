@@ -1,4 +1,3 @@
-
 # django-handleref
 
 [![PyPI](https://img.shields.io/pypi/v/django-handleref.svg?maxAge=3600)](https://pypi.python.org/pypi/django-handleref)
