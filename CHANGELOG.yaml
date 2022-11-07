@@ -1,6 +1,7 @@
 Unreleased:
   added: []
-  fixed: []
+  fixed:
+  - issue with pagination in object history view causing timeout (#19)
   changed: []
   deprecated: []
   removed: []
