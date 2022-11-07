@@ -454,7 +454,7 @@ class HistoryListing(ChangeList):
         self.full_result_count = qset.count()
         self.multi_page = result_count > self.list_per_page
 
-        self.result_list = self.paginator.page(self.page_num + 1).object_list
+        self.result_list = self.paginator.page(self.page_num).object_list
 
         self.params = dict(request.GET.items())
         if "p" in self.params:
