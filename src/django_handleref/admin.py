@@ -440,9 +440,9 @@ class HistoryListing(ChangeList):
 
     def __init__(self, model_admin, request, qset):
         try:
-            self.page_num = int(request.GET.get("p", 0))
+            self.page_num = int(request.GET.get("p", 1))
         except ValueError:
-            self.page_num = 0
+            self.page_num = 1
 
         self.list_per_page = 100
         self.paginator = model_admin.get_paginator(request, qset, self.list_per_page)
@@ -454,7 +454,7 @@ class HistoryListing(ChangeList):
         self.full_result_count = qset.count()
         self.multi_page = result_count > self.list_per_page
 
-        self.result_list = self.paginator.page(self.page_num + 1).object_list
+        self.result_list = self.paginator.page(self.page_num).object_list
 
         self.params = dict(request.GET.items())
         if "p" in self.params:

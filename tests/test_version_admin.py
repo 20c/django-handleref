@@ -87,6 +87,11 @@ def test_view_object_history(db, superuser, reversion_org):
 
 
 @pytest.mark.django_db
+def test_view_object_history_pagination(db, superuser, reversion_org_many):
+    _test_view_object_history(*reversion_org_many, **superuser)
+
+
+@pytest.mark.django_db
 def test_view_version_details(db, superuser, reversion_org):
     _test_view_version_details(*reversion_org, **superuser)
 

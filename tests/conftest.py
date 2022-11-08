@@ -39,6 +39,26 @@ def reversion_org():
     return (org, [ReversionVersion(v) for v in versions])
 
 
+@pytest.fixture
+def reversion_org_many():
+    import reversion
+
+    from django_handleref.version import ReversionVersion
+    from tests.reversion_models import VersionedOrg
+
+    with reversion.create_revision():
+        org = VersionedOrg.objects.create(name="Test", status="ok")
+
+    for i in range(0, 150):
+        with reversion.create_revision():
+            org.name = f"Updated {i}"
+            org.save()
+
+    versions = reversion.models.Version.objects.get_for_object(org).order_by("id")
+
+    return (org, [ReversionVersion(v) for v in versions])
+
+
 def pytest_configure():
 
     settings.configure(
