@@ -1,10 +1,14 @@
 Unreleased:
-  added: []
+  added:
+  - python 3.10 support
+  - django 4.0 support
   fixed:
   - issue with pagination in object history view causing timeout (#19)
   changed: []
   deprecated: []
-  removed: []
+  removed:
+  - python 3.6 support
+  - django 2.2 support
   security: []
 0.2.0:
   added:
