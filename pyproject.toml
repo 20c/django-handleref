@@ -13,32 +13,34 @@ classifiers = [
   "Topic :: Software Development",
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.6",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
 ]
 
 packages = [{ include = "django_handleref", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
+python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 # testing
+django-reversion = ">=3"
 codecov = "*"
 pytest = ">=6.0.1"
 pytest-django = ">=3.8.0"
 pytest-cov = "*"
 pytest-pythonpath = "*"
 tox = ">=3.24"
+tox-gh-actions = ">=2.9.1"
 
 # linting
 #bandit = ">=1.6.2"
 black = { version = ">=20", allow-prereleases = true }
 isort = "^5.7.0"
 flake8 = "^3.8.4"
-mypy = "^0.812"
+mypy = ">=0.950"
 pre-commit = "^2.13"
 pyupgrade = "^2.19.4"
 
