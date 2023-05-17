@@ -28,7 +28,6 @@ from tests.reversion_models import VersionedOrg
     ],
 )
 def test_version_interface(field):
-
     version = Version(object())
 
     with pytest.raises(NotImplementedError):
@@ -103,7 +102,6 @@ def _test_rollback(org, versions, reverter):
 
 @pytest.mark.django_db
 def test_reversion_version_fields(db):
-
     with reversion.create_revision():
         org = VersionedOrg.objects.create(name="Test", status="ok")
 
