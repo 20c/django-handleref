@@ -28,7 +28,6 @@ class ManagerTests(TestCase):
         self.assertEqual(Org.handleref.last_change(), org.updated)
 
     def test_since(self):
-
         org = self.orgs[0]
         t = time.time()
 

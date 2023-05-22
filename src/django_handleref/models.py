@@ -119,7 +119,6 @@ class HandleRefModel(models.Model, metaclass=HandleRefMeta):
         return name + "-" + self.handle
 
     def delete(self, hard=False):
-
         """
         Override the vanilla delete functionality to soft-delete
         instead. Soft-delete is accomplished by setting the
