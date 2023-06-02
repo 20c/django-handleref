@@ -2,6 +2,11 @@
 
 
 ## Unreleased
+### Added
+- python 3.11 support
+- django 4.2 support
+### Removed
+- python 3.7 support
 
 
 ## 1.1.0

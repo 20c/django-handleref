@@ -14,7 +14,7 @@ ctl:
       type: git
       config:
         repo_url: git@github.com:20c/ctl-tmpl-python
-        branch: origin/main
+        branch: main
 
     # template for copying template assets
 
