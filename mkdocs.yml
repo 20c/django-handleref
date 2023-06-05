@@ -1,0 +1,18 @@
+site_name: django-handleref
+site_url: https://github.com/20c/django-handleref
+
+theme: readthedocs
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - API:
+    - django_handleref.admin: api/django_handleref.admin.md
+    - django_handleref.manager: api/django_handleref.manager.md
+    - django_handleref.util: api/django_handleref.util.md
+    - django_handleref.version: api/django_handleref.version.md
+
+markdown_extensions:
+  - markdown_include.include
+  - admonition
+  - pymdgen
