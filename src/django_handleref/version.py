@@ -15,7 +15,6 @@ class Version:
     """
 
     def __init__(self, version):
-
         """
         Argument(s):
 
@@ -154,7 +153,6 @@ class Version:
         return Diff(previous, self).changes
 
     def changed_fields(self, previous):
-
         """
         Return a list of changed fields between
         this version and a previous version
@@ -333,7 +331,6 @@ class Diff:
     ]
 
     def __init__(self, version_a, version_b):
-
         """
         Argument(s):
 
@@ -347,7 +344,6 @@ class Diff:
 
     @property
     def changes(self):
-
         """
         Compile and return a dict describing changes between
         the two versions tracked in this diff
@@ -409,7 +405,6 @@ class Reverter:
     """
 
     def revert_fields(self, instance, field_versions, **kwargs):
-
         """
         Revert a set of fields
 
@@ -434,7 +429,6 @@ class Reverter:
         instance.save()
 
     def rollback(self, instance, version, **kwargs):
-
         """
         Rollback to a specific version
 
@@ -460,7 +454,6 @@ class Reverter:
         instance.save()
 
     def validate_status_change(self, instance, status):
-
         """
         Validate a status value change - this will make sure
         an object cannot be undeleted if a parent relationship
@@ -484,7 +477,6 @@ class Reverter:
             self.validate_parent_status(instance, relation, status)
 
     def validate_parent_status(self, instance, parent, status):
-
         if not hasattr(parent, "HandleRef"):
             return
 
@@ -505,7 +497,6 @@ class ReversionReverter(Reverter):
     """
 
     def revert_fields(self, instance, field_versions, user=None):
-
         """
         Revert a set of fields
 
@@ -540,7 +531,6 @@ class ReversionReverter(Reverter):
             super().revert_fields(instance, field_versions)
 
     def rollback(self, instance, version, user=None):
-
         """
         Rollback to a specific version
 

@@ -47,7 +47,6 @@ class HandleRefQuerySet(models.QuerySet):
         qset = self
 
         if timestamp is not None:
-
             if isinstance(timestamp, numbers.Real):
                 timestamp = datetime.datetime.fromtimestamp(timestamp)
 
@@ -56,17 +55,14 @@ class HandleRefQuerySet(models.QuerySet):
             )
 
         if version is not None:
-
             qset = qset.filter(version__gt=version)
 
         if not deleted:
-
             qset = qset.undeleted()
 
         return qset
 
     def undeleted(self):
-
         """
         Only return objects that are not soft-deleted
         """

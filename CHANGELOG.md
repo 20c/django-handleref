@@ -2,6 +2,22 @@
 
 
 ## Unreleased
+### Added
+- python 3.11 support
+- django 4.2 support
+### Removed
+- python 3.7 support
+
+
+## 1.1.0
+### Added
+- python 3.10 support
+- django 4.0 support
+### Fixed
+- issue with pagination in object history view causing timeout (#19)
+### Removed
+- python 3.6 support
+- django 2.2 support
 
 
 ## 1.0.2

@@ -3,12 +3,12 @@ import re
 import traceback
 
 from django import forms
-from django.conf.urls import re_path
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+from django.urls import re_path
 from django.utils.translation import gettext_lazy as _
 
 # soft import reversion - since it is not a hard
@@ -123,7 +123,6 @@ class VersionAdmin(admin.ModelAdmin):
         return history_qset
 
     def history_entry(self, version, previous):
-
         """
         Compile object history list entry dict
 
@@ -186,7 +185,6 @@ class VersionAdmin(admin.ModelAdmin):
         return history
 
     def history_view(self, request, object_id):
-
         """
         object history view
         """
@@ -225,7 +223,6 @@ class VersionAdmin(admin.ModelAdmin):
         return super().history_view(request, object_id, context)
 
     def version_details_view(self, request, object_id, version_id, extra_context=None):
-
         """
         Show version details
         """
@@ -251,7 +248,6 @@ class VersionAdmin(admin.ModelAdmin):
         return TemplateResponse(request, self.version_details_template, context)
 
     def version_revert_view(self, request, object_id, extra_context=None):
-
         """
         Show version revert preview / confiformation view
         """
@@ -286,7 +282,6 @@ class VersionAdmin(admin.ModelAdmin):
         return TemplateResponse(request, self.version_revert_template, context)
 
     def version_revert_process(self, request, object_id, extra_context=None):
-
         """
         Process revert version(s)
         """
@@ -312,7 +307,6 @@ class VersionAdmin(admin.ModelAdmin):
 
         errors = {}
         try:
-
             # revert
 
             reverter = self.reverter_cls()
@@ -320,13 +314,11 @@ class VersionAdmin(admin.ModelAdmin):
             reverter.revert_fields(instance, field_versions, user=request.user)
 
         except ValidationError as exc:
-
             # validation errors are collected
 
             errors = exc.message_dict
 
         except Exception as exc:
-
             # any other errors are logged
 
             errors = {"non_field_errors": ["Internal Error (check server logs)"]}
@@ -352,7 +344,6 @@ class VersionAdmin(admin.ModelAdmin):
         )
 
     def version_rollback_view(self, request, object_id, version_id, extra_context=None):
-
         """
         Version rollback preview / confirmation view
         """
@@ -377,7 +368,6 @@ class VersionAdmin(admin.ModelAdmin):
     def version_rollback_process(
         self, request, object_id, version_id, extra_context=None
     ):
-
         """
         Version rollback process
         """
@@ -391,7 +381,6 @@ class VersionAdmin(admin.ModelAdmin):
 
         errors = {}
         try:
-
             # rollback
 
             reverter = self.reverter_cls()
@@ -399,13 +388,11 @@ class VersionAdmin(admin.ModelAdmin):
             reverter.rollback(instance, version, user=request.user)
 
         except ValidationError as exc:
-
             # collect validation errors
 
             errors = exc.message_dict
 
         except Exception as exc:
-
             # log any other errors
 
             errors = {"non_field_errors": ["Internal Error (check server logs)"]}
@@ -440,9 +427,9 @@ class HistoryListing(ChangeList):
 
     def __init__(self, model_admin, request, qset):
         try:
-            self.page_num = int(request.GET.get("p", 0))
+            self.page_num = int(request.GET.get("p", 1))
         except ValueError:
-            self.page_num = 0
+            self.page_num = 1
 
         self.list_per_page = 100
         self.paginator = model_admin.get_paginator(request, qset, self.list_per_page)
@@ -454,7 +441,7 @@ class HistoryListing(ChangeList):
         self.full_result_count = qset.count()
         self.multi_page = result_count > self.list_per_page
 
-        self.result_list = self.paginator.page(self.page_num + 1).object_list
+        self.result_list = self.paginator.page(self.page_num).object_list
 
         self.params = dict(request.GET.items())
         if "p" in self.params:
