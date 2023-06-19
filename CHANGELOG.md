@@ -2,6 +2,9 @@
 
 
 ## Unreleased
+
+
+## 2.0.0
 ### Added
 - python 3.11 support
 - django 4.2 support
