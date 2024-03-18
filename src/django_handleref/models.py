@@ -8,9 +8,10 @@ try:
 
     def handle_version(**kwargs):
         for vs in kwargs.get("versions"):
-            instance = vs.object
-            instance.version = instance.version + 1
-            instance.save()
+            if isinstance(vs.object, HandleRefModel):
+                instance = vs.object
+                instance.version = instance.version + 1
+                instance.save()
 
     reversion.signals.post_revision_commit.connect(handle_version)
 except ImportError:
