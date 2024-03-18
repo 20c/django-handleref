@@ -1,6 +1,6 @@
 Unreleased:
   added:
-  - python: 3.12 support
+  - python 3.12 support
   fixed:
   - fix reversion signal handler to only update version field on HandleRef models (thanks to @ercpe)
   changed: []
