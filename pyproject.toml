@@ -35,22 +35,22 @@ tox-gh-actions = ">=2.9.1"
 
 # linting
 black = { version = ">=20", allow-prereleases = true }
-isort = "^5.7.0"
-flake8 = "^3.8.4"
+isort = ">=5.7.0"
+flake8 = ">=3.8.4"
 mypy = ">=0.950"
-pre-commit = "^2.13"
-pyupgrade = "^2.19.4"
+pre-commit = ">=2.13"
+pyupgrade = ">=2.19.4"
 
 # ctl
-ctl = "^1"
-jinja2 = "^3.1.2"
-tmpl = "^1"
-twine = "^3.3.0"
+ctl = ">=1"
+jinja2 = ">=3.1.2"
+tmpl = ">=1"
+twine = ">=3.3.0"
 
 # docs
 markdown-include = ">=0.5"
-mkdocs = "^1.2.3"
-pymdgen = "^1.0.0"
+mkdocs = ">=1.2.3"
+pymdgen = ">=1.0.0"
 
 [tool.poetry.extras]
 docs = ["markdown-include", "mkdocs", "pymdgen"]
