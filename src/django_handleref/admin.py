@@ -29,7 +29,6 @@ class HistoryActionsForm(forms.Form):
 
 
 class VersionAdmin(admin.ModelAdmin):
-
     """
     ModelAdmin mixin that will enable handleref version
     history for any model it is attached to
@@ -419,7 +418,6 @@ class VersionAdmin(admin.ModelAdmin):
 
 
 class HistoryListing(ChangeList):
-
     """
     History listing view derived from how django admin does it's
     ChangeList. This is mostly so we can support pagination

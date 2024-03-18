@@ -7,7 +7,6 @@ except ImportError:
 
 
 class Version:
-
     """
     Object version interface - extend to support
     different types of django object versioning
@@ -174,7 +173,6 @@ class Version:
 
 
 class ReversionVersion(Version):
-
     """
     Version abtraction for django-reversion
     """
@@ -317,7 +315,6 @@ class ReversionVersion(Version):
 
 
 class Diff:
-
     """
     Describes changes between two versions
     """
@@ -399,7 +396,6 @@ class Diff:
 
 
 class Reverter:
-
     """
     Allows to revert / rollback changes
     """
@@ -491,7 +487,6 @@ class Reverter:
 
 
 class ReversionReverter(Reverter):
-
     """
     Reverter abstraction for django-reversion
     """
