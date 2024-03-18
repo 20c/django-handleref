@@ -1,6 +1,7 @@
 Unreleased:
   added: []
-  fixed: []
+  fixed:
+  - fix reversional handler to only update version field on HandleRef models (thanks to @ercpe)
   changed: []
   deprecated: []
   removed: []
