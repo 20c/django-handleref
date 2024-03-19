@@ -9,7 +9,7 @@ Track when an object was created or changed and allow querying based on time and
 
 ### License
 
-Copyright 2015-2023 20C, LLC
+Copyright 2015-2024 20C, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this software except in compliance with the License.
