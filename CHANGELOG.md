@@ -8,6 +8,11 @@
 - fix reversion signal handler to only update version field on HandleRef models (thanks to @ercpe)
 
 
+## 2.0.1
+### Fixed
+- fix reversion signal handler to only update version field on HandleRef models (thanks to @ercpe)
+
+
 ## 2.0.0
 ### Added
 - python 3.11 support

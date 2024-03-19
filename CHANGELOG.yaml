@@ -7,6 +7,10 @@ Unreleased:
   deprecated: []
   removed: []
   security: []
+2.0.1:
+  fixed:
+  - fix reversion signal handler to only update version field on HandleRef models
+    (thanks to @ercpe)
 2.0.0:
   added:
   - python 3.11 support
