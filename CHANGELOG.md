@@ -2,6 +2,9 @@
 
 
 ## Unreleased
+
+
+## 2.0.1
 ### Fixed
 - fix reversion signal handler to only update version field on HandleRef models (thanks to @ercpe)
 
