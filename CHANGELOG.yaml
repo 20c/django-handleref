@@ -1,6 +1,6 @@
 Unreleased:
-  added: []
-  fixed: []
+  added:
+  - python 3.12 support
   changed: []
   deprecated: []
   removed: []

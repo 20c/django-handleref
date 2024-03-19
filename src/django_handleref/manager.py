@@ -6,7 +6,6 @@ from django.db import models
 
 
 class HandleRefQuerySet(models.QuerySet):
-
     """
     Custom queryset to provide handleref querying
     """
@@ -71,7 +70,6 @@ class HandleRefQuerySet(models.QuerySet):
 
 
 class HandleRefManager(models.Manager):
-
     """
     Custom manager to provide handleref querying
     """

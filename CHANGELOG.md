@@ -2,6 +2,8 @@
 
 
 ## Unreleased
+### Added
+- python 3.12 support
 
 
 ## 2.0.1
